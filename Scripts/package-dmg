@@ -1,0 +1,13 @@
+#!/bin/zsh
+set -euo pipefail
+cd "${0:A:h:h}"
+version="${SUNMOUSE_VERSION:-0.1.0}"
+[[ "$version" =~ '^[0-9]+\.[0-9]+\.[0-9]+$' ]] || { print -u2 'Expected a version such as 0.1.0'; exit 1; }
+app='build/Release/SunMouse.app'
+[[ -d "$app" ]] || { print -u2 'Run Scripts/build-sunmouse first'; exit 1; }
+staging=$(mktemp -d "${TMPDIR:-/tmp/}sunmouse-dmg.XXXXXX")
+trap 'rm -rf "$staging"' EXIT
+ditto "$app" "$staging/SunMouse.app"
+ln -s /Applications "$staging/Applications"
+hdiutil create -volname SunMouse -srcfolder "$staging" -format UDZO -ov "build/Release/SunMouse-v${version}.dmg"
+hdiutil verify "build/Release/SunMouse-v${version}.dmg"

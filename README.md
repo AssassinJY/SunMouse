@@ -10,6 +10,18 @@ SunMouse 是一款原生 macOS 鼠标工具，可按设备调整指针与滚轮�
 - **配置鼠标手势**：使用右键方向轨迹、按住按钮滚轮或鼠标点击触发动作，并按应用设置规则范围。
 - **适配多只鼠标**：每只鼠标可使用独立的指针和滚轮设置，按键与轨迹状态彼此隔离；支持配置导入和导出。
 
+## 下载与安装
+
+从 [GitHub Releases](https://github.com/AssassinJY/SunMouse/releases) 下载 DMG，打开后将 SunMouse 拖入 Applications。支持 macOS 26 及以上的 Apple Silicon 和 Intel Mac；首次启动需授权辅助功能。
+
+## 首次打开
+
+如果提示「SunMouse 已损坏，无法打开」，在终端执行以下命令后重新打开：
+
+```bash
+xattr -dr com.apple.quarantine /Applications/SunMouse.app
+```
+
 ## 参考项目
 
 SunMouse 将以下项目的代码基础与功能设计整合到一款应用中：
