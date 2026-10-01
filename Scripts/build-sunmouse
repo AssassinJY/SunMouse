@@ -1,0 +1,13 @@
+#!/bin/zsh
+set -euo pipefail
+cd "${0:A:h:h}"
+signing_identity='SunMouse Local Code Signing'
+xcodebuild -project SunMouse.xcodeproj -scheme SunMouse -configuration Release -derivedDataPath build build CODE_SIGNING_ALLOWED=NO MACOSX_DEPLOYMENT_TARGET=26.0
+mkdir -p build/Release
+/usr/bin/ditto build/Build/Products/Release/SunMouse.app build/Release/SunMouse.app
+mkdir -p build/Release/SunMouse.app/Contents/Resources/Licenses
+/usr/bin/ditto Licenses build/Release/SunMouse.app/Contents/Resources/Licenses
+cp THIRD_PARTY_NOTICES.md build/Release/SunMouse.app/Contents/Resources/
+codesign --force --deep --sign "$signing_identity" build/Release/SunMouse.app
+codesign --verify --deep --strict build/Release/SunMouse.app
+/usr/bin/ditto -c -k --sequesterRsrc --keepParent build/Release/SunMouse.app build/Release/SunMouse.zip

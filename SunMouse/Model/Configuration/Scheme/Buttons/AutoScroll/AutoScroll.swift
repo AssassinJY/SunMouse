@@ -1,0 +1,113 @@
+// MIT License
+// Copyright (c) 2021-2026 LinearMouse
+
+import Foundation
+
+extension Scheme.Buttons {
+    struct AutoScroll: Equatable, ImplicitInitable {
+        enum ToggleActivation: String, Codable, Equatable, CaseIterable, Identifiable {
+            var id: Self {
+                self
+            }
+
+            case shortPress
+            case longPress
+        }
+
+        enum Mode: String, Codable, Equatable, CaseIterable, Identifiable {
+            var id: Self {
+                self
+            }
+
+            case toggle
+            case hold
+        }
+
+        var enabled: Bool?
+        var toggleActivation: ToggleActivation?
+        var modes: [Mode]?
+        var speed: Decimal?
+        var trigger: Mapping?
+
+        init() {}
+    }
+}
+
+extension Scheme.Buttons.AutoScroll: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+        case toggleActivation
+        case mode
+        case speed
+        case trigger
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        enabled = try container.decodeIfPresent(Bool.self, forKey: .enabled)
+        toggleActivation = try container.decodeIfPresent(ToggleActivation.self, forKey: .toggleActivation)
+        modes = try container.decodeIfPresent(SingleValueOrArray<Mode>.self, forKey: .mode)?.wrappedValue
+        speed = try container.decodeIfPresent(Decimal.self, forKey: .speed)
+        trigger = try container.decodeIfPresent(Scheme.Buttons.Mapping.self, forKey: .trigger)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encodeIfPresent(enabled, forKey: .enabled)
+        try container.encodeIfPresent(toggleActivation, forKey: .toggleActivation)
+        try container.encode(SingleValueOrArray(wrappedValue: modes), forKey: .mode)
+        try container.encodeIfPresent(speed, forKey: .speed)
+        try container.encodeIfPresent(trigger, forKey: .trigger)
+    }
+}
+
+extension Scheme.Buttons.AutoScroll {
+    var normalizedToggleActivation: ToggleActivation {
+        toggleActivation ?? .shortPress
+    }
+
+    var normalizedModes: [Mode] {
+        let orderedModes = Mode.allCases.filter { modes?.contains($0) == true }
+        return orderedModes.isEmpty ? [.toggle] : orderedModes
+    }
+
+    var hasToggleMode: Bool {
+        normalizedModes.contains(.toggle)
+    }
+
+    var hasHoldMode: Bool {
+        normalizedModes.contains(.hold)
+    }
+
+    func merge(into autoScroll: inout Self) {
+        if let enabled {
+            autoScroll.enabled = enabled
+        }
+
+        if let toggleActivation {
+            autoScroll.toggleActivation = toggleActivation
+        }
+
+        if let modes {
+            autoScroll.modes = modes
+        }
+
+        if let speed {
+            autoScroll.speed = speed
+        }
+
+        if let trigger {
+            autoScroll.trigger = trigger
+        }
+    }
+
+    func merge(into autoScroll: inout Self?) {
+        if autoScroll == nil {
+            autoScroll = Self()
+        }
+
+        merge(into: &autoScroll!)
+    }
+}

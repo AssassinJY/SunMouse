@@ -1,0 +1,77 @@
+{
+  "pins" : [
+    {
+      "identity" : "appmover",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/linearmouse/AppMover",
+      "state" : {
+        "branch" : "master",
+        "revision" : "fbd0e88e24b606245beac62da0b8a30c2b905934"
+      }
+    },
+    {
+      "identity" : "defaults",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/Defaults",
+      "state" : {
+        "branch" : "main",
+        "revision" : "8584d1d6ed36c195258977f2ed0cf95357efb160"
+      }
+    },
+    {
+      "identity" : "jsonpatcher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/linearmouse/JSONPatcher.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "fef582b56aff502305e4dbcfabf76cb57b5d4e15"
+      }
+    },
+    {
+      "identity" : "launchatlogin",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/LaunchAtLogin",
+      "state" : {
+        "revision" : "7ad6331f9c38953eb1ce8737758e18f7607e984a",
+        "version" : "5.0.0"
+      }
+    },
+    {
+      "identity" : "lrucache",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nicklockwood/LRUCache.git",
+      "state" : {
+        "revision" : "6d2b5246c9c98dcd498552bb22f08d55b12a8371",
+        "version" : "1.0.4"
+      }
+    },
+    {
+      "identity" : "publishedobject",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Amzd/PublishedObject",
+      "state" : {
+        "revision" : "e61bfde22832ba8dfe9f8be2561838a1512e38af",
+        "version" : "0.2.0"
+      }
+    },
+    {
+      "identity" : "sparkle",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/lujjjh/Sparkle",
+      "state" : {
+        "revision" : "f65abe543fffa92611b8066692e694f92d3cd68f",
+        "version" : "2.4.0"
+      }
+    },
+    {
+      "identity" : "version",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mrackwitz/Version.git",
+      "state" : {
+        "revision" : "fd4b0eb5756aa7f1c33977fb626cf37d2140a3a0",
+        "version" : "0.8.0"
+      }
+    }
+  ],
+  "version" : 2
+}

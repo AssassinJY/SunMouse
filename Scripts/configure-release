@@ -1,0 +1,7 @@
+#!/bin/bash -e
+
+pushd $(dirname "$0") > /dev/null
+cd ..
+echo "PRODUCT_BUNDLE_IDENTIFIER = local.sun.SunMouse" >> Release.xcconfig
+echo "ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon" >> Release.xcconfig
+popd

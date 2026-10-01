@@ -1,0 +1,1334 @@
+type SingleValueOrArray<T> = T | T[];
+
+/** @asType number */
+type Int = number;
+
+/** @pattern ^\d+$ */
+type IntString = string;
+
+/** @pattern ^0x[0-9a-fA-F]+$ */
+type HexString = string;
+
+type PhysicalButton = Primary | Secondary | Auxiliary | Back | Forward | number;
+
+/**
+ * @title Unset
+ * @description A special value that explicitly restores a setting to the system or device default. Currently supported in pointer settings; may be supported more broadly in the future.
+ */
+export type Unset = "unset";
+
+/**
+ * @description Primary button, usually the left button.
+ */
+type Primary = 0;
+
+/**
+ * @description Secondary button, usually the right button.
+ */
+type Secondary = 1;
+
+/**
+ * @description Auxiliary button, usually the wheel button or the middle button.
+ */
+type Auxiliary = 2;
+
+/**
+ * @description Forth button, typically the back button.
+ */
+type Back = 3;
+
+/**
+ * @description Fifth button, typically the forward button.
+ */
+type Forward = 4;
+
+export type Configuration = {
+  $schema?: string;
+
+  /**
+   * @title Schemes
+   * @description A scheme is a collection of settings that are activated in specified circumstances.
+   * @examples [{"if":{"device":{"category":"mouse"}},"scrolling":{"reverse":"vertical"}}]
+   */
+  schemes?: Scheme[];
+};
+
+type Scheme = {
+  /**
+   * @title Scheme activation conditions
+   * @description This value can be a single condition or an array. A scheme is activated if at least one of the conditions is met.
+   */
+  if?: SingleValueOrArray<Scheme.If>;
+
+  /**
+   * @title Scrolling settings
+   * @description Customize the scrolling behavior.
+   */
+  scrolling?: Scheme.Scrolling;
+
+  /**
+   * @title Pointer settings
+   * @description Customize the pointer acceleration and speed.
+   */
+  pointer?: Scheme.Pointer;
+
+  /**
+   * @title Buttons settings
+   * @description Customize the buttons behavior.
+   */
+  buttons?: Scheme.Buttons;
+
+  /**
+   * @title Logitech settings
+   * @description Customize supported Logitech HID++ device behavior.
+   */
+  logitech?: Scheme.Logitech;
+};
+
+declare namespace Scheme {
+  type If = {
+    /**
+     * @title Device
+     * @description Match one or more devices. If not provided, the scheme is activated on all devices.
+     */
+    device?: If.Device;
+
+    /**
+     * @title App
+     * @description Match apps by providing the bundle ID. For example, `com.apple.Safari`.
+     */
+    app?: string;
+
+    /**
+     * @title Parent app
+     * @description Match apps by providing the bundle ID of the parent process. For example, `org.polymc.PolyMC`.
+     */
+    parentApp?: string;
+
+    /**
+     * @title Group app
+     * @description Match apps by providing the bundle ID of the process group. For example, `org.polymc.PolyMC`.
+     */
+    groupApp?: string;
+
+    /**
+     * @title Process name
+     * @description Match by the executable file name of the frontmost process (from NSRunningApplication.executableURL.lastPathComponent). Case-sensitive.
+     */
+    processName?: string;
+
+    /**
+     * @title Process path
+     * @description Match by the absolute executable path of the frontmost process (from NSRunningApplication.executableURL.path). Case-sensitive.
+     */
+    processPath?: string;
+
+    /**
+     * @title Display name
+     * @description Match displays by providing the display name. For example, `DELL P2415Q`.
+     */
+    display?: string;
+  };
+
+  namespace If {
+    type Device = {
+      /**
+       * @title Vendor ID
+       * @description The vendor ID of the devices.
+       * @examples ["0xA123"]
+       */
+      vendorID?: HexString | Int;
+
+      /**
+       * @title Product ID
+       * @description The product ID of the devices.
+       * @examples ["0xA123"]
+       */
+      productID?: HexString | Int;
+
+      /**
+       * @title Product name
+       * @description The product name of the devices.
+       */
+      productName?: string;
+
+      /**
+       * @title Serial number
+       * @description The serial number of the devices.
+       */
+      serialNumber?: string;
+
+      /**
+       * @title Category
+       * @description The category of the devices.
+       */
+      category?: SingleValueOrArray<Category>;
+    };
+
+    /**
+     * @title Mouse
+     * @description Match mouse devices.
+     */
+    type Mouse = "mouse";
+
+    /**
+     * @title Trackpad
+     * @description Match trackpad devices.
+     */
+    type Trackpad = "trackpad";
+
+    type Category = Mouse | Trackpad;
+  }
+
+  type Scrolling = {
+    /**
+     * @title Reverse scrolling
+     */
+    reverse?: Scrolling.Bidirectional<boolean>;
+
+    /**
+     * @title Scroll distance
+     * @description The distance after rolling the wheel.
+     */
+    distance?: Scrolling.Bidirectional<Scrolling.Distance>;
+
+    /**
+     * @description The scrolling acceleration.
+     * @default 1
+     */
+    acceleration?: Scrolling.Bidirectional<number>;
+
+    /**
+     * @description The scrolling speed.
+     * @default 0
+     */
+    speed?: Scrolling.Bidirectional<number>;
+
+    /**
+     * @title Smoothed scrolling
+     * @description Use a preset curve or fine-tune response, speed, acceleration, and inertia.
+     */
+    smoothed?: Scrolling.Bidirectional<Scrolling.Smoothed>;
+
+    /**
+     * @title Modifier keys settings
+     */
+    modifiers?: Scrolling.Bidirectional<Scrolling.Modifiers>;
+  };
+
+  namespace Scrolling {
+    type Bidirectional<T> =
+      | T
+      | undefined
+      | {
+          vertical?: T;
+          horizontal?: T;
+        };
+
+    /**
+     * @description The scrolling distance will not be modified.
+     */
+    type Auto = "auto";
+
+    type Distance = Auto | Distance.Line | Distance.Pixel;
+
+    namespace Distance {
+      /**
+       * @description The scrolling distance in lines.
+       */
+      type Line = Int | IntString;
+
+      /**
+       * @description The scrolling distance in pixels.
+       * @pattern ^(?:0|[1-9]\d*)(?:\.\d+)?px$
+       */
+      type Pixel = string;
+    }
+
+    type Smoothed = {
+      /**
+       * @description Set to `false` to explicitly disable inherited smoothed scrolling for this direction.
+       * @default true
+       */
+      enabled?: boolean;
+
+      /**
+       * @description The preset curve to use.
+       * @default "easeInOut"
+       */
+      preset?: Smoothed.Preset;
+
+      /**
+       * @description How quickly the scrolling responds to input.
+       */
+      response?: number;
+
+      /**
+       * @description The scrolling speed.
+       */
+      speed?: number;
+
+      /**
+       * @description The scrolling acceleration.
+       */
+      acceleration?: number;
+
+      /**
+       * @description The scrolling inertia.
+       */
+      inertia?: number;
+
+      /**
+       * @description Set to `false` to avoid rubber-band overscroll when smoothed scrolling emits synthetic continuous scroll events.
+       * @default true
+       */
+      bouncing?: boolean;
+    };
+
+    namespace Smoothed {
+      type Preset =
+        | "custom"
+        | "linear"
+        | "easeIn"
+        | "easeOut"
+        | "easeInOut"
+        | "quadratic"
+        | "cubic"
+        | "quartic"
+        | "easeOutCubic"
+        | "easeInOutCubic"
+        | "easeOutQuartic"
+        | "easeInOutQuartic"
+        | "smooth";
+    }
+
+    type Modifiers = {
+      /**
+       * @description The action when command key is pressed.
+       */
+      command?: Modifiers.Action;
+
+      /**
+       * @description The action when shift key is pressed.
+       */
+      shift?: Modifiers.Action;
+
+      /**
+       * @description The action when option key is pressed.
+       */
+      option?: Modifiers.Action;
+
+      /**
+       * @description The action when control key is pressed.
+       */
+      control?: Modifiers.Action;
+    };
+
+    namespace Modifiers {
+      /**
+       * @deprecated
+       * @description Default action.
+       */
+      type None = { type: "none" };
+
+      /**
+       * @description Default action.
+       */
+      type Auto = { type: "auto" };
+
+      /**
+       * @description Ignore modifier.
+       */
+      type Ignore = { type: "ignore" };
+
+      /**
+       * @description No action.
+       */
+      type PreventDefault = { type: "preventDefault" };
+
+      /**
+       * @description Alter the scrolling orientation from vertical to horizontal or vice versa.
+       */
+      type AlterOrientation = {
+        type: "alterOrientation";
+      };
+
+      /**
+       * @description Scale the scrolling speed.
+       */
+      type ChangeSpeed = {
+        type: "changeSpeed";
+
+        /**
+         * @description The factor to scale the scrolling speed.
+         */
+        scale: number;
+      };
+
+      /**
+       * @description Zoom in and out using ⌘+ and ⌘-.
+       */
+      type Zoom = {
+        type: "zoom";
+      };
+
+      /**
+       * @description Zoom in and out using reversed ⌘+ and ⌘-.
+       */
+      type ZoomReversed = {
+        type: "zoomReversed";
+      };
+
+      /**
+       * @description Zoom in and out using pinch gestures.
+       */
+      type PinchZoom = {
+        type: "pinchZoom";
+      };
+
+      /**
+       * @description Zoom in and out using reversed pinch gestures.
+       */
+      type PinchZoomReversed = {
+        type: "pinchZoomReversed";
+      };
+
+      type Action =
+        | None
+        | Auto
+        | Ignore
+        | PreventDefault
+        | AlterOrientation
+        | ChangeSpeed
+        | Zoom
+        | ZoomReversed
+        | PinchZoom
+        | PinchZoomReversed;
+    }
+  }
+
+  type Pointer = {
+    /**
+     * @title Pointer acceleration
+     * @description A number to set acceleration, or "unset" to restore system default. If omitted, the previous/merged value applies.
+     * @minimum 0
+     * @maximum 40
+     */
+    acceleration?: number | Unset;
+
+    /**
+     * @title Pointer speed
+     * @description A number to set speed, or "unset" to restore device default. If omitted, the previous/merged value applies.
+     * @minimum 0
+     * @maximum 1
+     */
+    speed?: number | Unset;
+
+    /**
+     * @title Hardware DPI
+     * @description A device-specific hardware DPI value for supported devices. If omitted, no hardware DPI will be applied.
+     * @minimum 100
+     */
+    hardwareDPI?: number;
+
+    /**
+     * @title Disable pointer acceleration
+     * @description If the value is true, the pointer acceleration will be disabled and acceleration and speed will not take effect.
+     * @default false
+     */
+    disableAcceleration?: boolean;
+
+    /**
+     * @title Redirects to scroll
+     * @description If the value is true, pointer movements will be redirected to scroll events.
+     * @default false
+     */
+    redirectsToScroll?: boolean;
+
+    /**
+     * @title Redirects to scroll trigger
+     * @description If set, pointer movements are redirected to scroll events only while this trigger is held. The trigger press is not sent to applications. Requires redirectsToScroll to be true.
+     */
+    redirectsToScrollTrigger?: Pointer.RedirectsToScrollTrigger;
+  };
+
+  namespace Pointer {
+    /**
+     * @description A mouse button, optionally with modifier keys. The primary button requires at least one modifier key.
+     */
+    type RedirectsToScrollTrigger = {
+      input: { button: PhysicalButton };
+
+      /**
+       * @description Keyboard modifiers that must match exactly when the button is pressed.
+       */
+      modifiers?: Buttons.Mapping.Modifier[];
+    };
+  }
+
+  type Logitech = {
+    /**
+     * @title High resolution wheel
+     * @description Enable finer vertical wheel steps on supported Logitech HID++ mice.
+     */
+    highResolutionWheel?: boolean;
+  };
+
+  type Buttons = {
+    /**
+     * @title Button mappings
+     * @description Assign actions to buttons, chords, long presses, swipes, and wheel gestures.
+     */
+    mappings?: Buttons.Mapping[];
+
+    /**
+     * @title Universal back and forward
+     * @description If the value is true, the back and forward side buttons will be enabled in Safari and some other apps that do not handle these side buttons correctly. If the value is "backOnly" or "forwardOnly", only universal back or universal forward will be enabled.
+     * @default false
+     */
+    universalBackForward?: Buttons.UniversalBackForward;
+
+    /**
+     * @title Switch primary and secondary buttons
+     * @description If the value is true, the primary button will be the right button and the secondary button will be the left button.
+     * @default false
+     */
+    switchPrimaryButtonAndSecondaryButtons?: boolean;
+
+    /**
+     * @title Debounce button clicks
+     * @description Ignore rapid clicks with a certain time period.
+     */
+    clickDebouncing?: Buttons.ClickDebouncing;
+
+    /**
+     * @title Gesture button
+     * @description Press and hold a button while dragging to trigger gestures like switching desktop spaces or opening Mission Control.
+     */
+    gesture?: Buttons.Gesture;
+
+    /**
+     * @title Auto scroll
+     * @description Click or hold a mouse button, then move the pointer to continuously scroll like the Windows middle-button autoscroll behavior.
+     */
+    autoScroll?: Buttons.AutoScroll;
+  };
+
+  namespace Buttons {
+    type AutoScroll = {
+      /**
+       * @description Indicates if auto scroll is enabled.
+       * @default false
+       */
+      enabled?: boolean;
+
+      /**
+       * @title Toggle activation
+       * @description Choose whether toggle mode activates with a short press or after the same long-press threshold used by button mappings. This does not affect hold mode.
+       * @default "shortPress"
+       */
+      toggleActivation?: AutoScroll.ToggleActivation;
+
+      /**
+       * @title Activation mode
+       * @description Use \"toggle\" to keep scrolling active until the trigger is pressed again, \"hold\" to scroll only while the trigger stays pressed, or provide both to support both behaviors.
+       */
+      mode?: SingleValueOrArray<AutoScroll.Mode>;
+
+      /**
+       * @description Adjust the auto scroll speed multiplier.
+       * @default 1
+       */
+      speed?: number;
+
+      /**
+       * @title Trigger
+       * @description Choose the mouse button and modifier keys used to activate auto scroll.
+       */
+      trigger?: AutoScroll.Trigger;
+    };
+
+    namespace AutoScroll {
+      /**
+       * @description Activate toggle mode with a short press.
+       */
+      type ShortPress = "shortPress";
+
+      /**
+       * @description Activate toggle mode after the button mapping long-press threshold.
+       */
+      type LongPress = "longPress";
+
+      type ToggleActivation = ShortPress | LongPress;
+
+      /**
+       * @description Keep auto scroll active until the trigger is pressed again. The toggleActivation setting controls whether activation requires a short or long press.
+       */
+      type Toggle = "toggle";
+
+      /**
+       * @description Auto scroll is active only while the trigger button remains pressed.
+       */
+      type Hold = "hold";
+
+      type Mode = Toggle | Hold;
+
+      type Trigger = {
+        /**
+         * @title Button number
+         * @description The button number. See https://developer.apple.com/documentation/coregraphics/cgmousebutton
+         */
+        button: Mapping.Button;
+
+        /**
+         * @description Indicates if the command modifier key should be pressed.
+         */
+        command?: boolean;
+
+        /**
+         * @description Indicates if the shift modifier key should be pressed.
+         */
+        shift?: boolean;
+
+        /**
+         * @description Indicates if the option modifier key should be pressed.
+         */
+        option?: boolean;
+
+        /**
+         * @description Indicates if the control modifier key should be pressed.
+         */
+        control?: boolean;
+      };
+    }
+
+    /**
+     * @description Legacy flat mappings are accepted and migrated to the structured format when the configuration is loaded.
+     */
+    type Mapping = Mapping.Legacy | Mapping.Structured;
+
+    namespace Mapping {
+      type Legacy = (
+      | {
+          /**
+           * @title Button number
+           * @description The button number. See https://developer.apple.com/documentation/coregraphics/cgmousebutton
+           */
+          button: Mapping.Button;
+
+          /**
+           * @description Indicates if key repeat is enabled. If the value is true, the action will be repeatedly executed when the button is hold according to the key repeat settings in System Settings.
+           */
+          repeat?: boolean;
+
+          /**
+           * @description Indicates if keyboard shortcut actions should stay pressed while the button is held. When enabled, SunMouse sends key down on button press and key up on button release instead of repeating the shortcut.
+           */
+          hold?: boolean;
+        }
+      | {
+          /**
+           * @title Scroll direction
+           * @description Map scroll events to specific actions.
+           */
+          scroll: Mapping.ScrollDirection;
+        }
+    ) & {
+      /**
+       * @description Indicates if the command modifier key should be pressed.
+       */
+      command?: boolean;
+
+      /**
+       * @description Indicates if the shift modifier key should be pressed.
+       */
+      shift?: boolean;
+
+      /**
+       * @description Indicates if the option modifier key should be pressed.
+       */
+      option?: boolean;
+
+      /**
+       * @description Indicates if the control modifier key should be pressed.
+       */
+      control?: boolean;
+
+      /**
+       * @title Action
+       */
+      action?: Mapping.Action;
+    };
+
+      type Structured =
+        | {
+            /**
+             * @title Trigger
+             * @description A button trigger. `simultaneous` buttons form an unordered chord; `whileHeld` buttons must already be down.
+             */
+            trigger: ButtonTrigger;
+
+            /**
+             * @title Outcomes
+             * @description Actions selected by how the button or chord is used. Timing and movement thresholds are global application policy.
+             */
+            outcomes: Outcomes;
+          }
+        | {
+            /**
+             * @title Trigger
+             * @description A wheel impulse, optionally while one or more buttons are held. Wheel triggers do not support long press or swipe outcomes.
+             */
+            trigger: WheelTrigger;
+
+            /**
+             * @title Action
+             */
+            action: Action;
+          };
+
+      type ButtonTrigger = {
+        input: { button: Button };
+
+        /**
+         * @description Additional buttons pressed within the global chord window. Their order does not matter.
+         */
+        simultaneous?: Button[];
+
+        /**
+         * @description Buttons that must already be held when this trigger begins.
+         */
+        whileHeld?: Button[];
+
+        /**
+         * @description Keyboard modifiers that must match exactly.
+         */
+        modifiers?: Modifier[];
+      };
+
+      type WheelTrigger = {
+        input: { wheel: ScrollDirection };
+
+        /**
+         * @description Buttons that must be held while the wheel moves.
+         */
+        whileHeld?: Button[];
+
+        /**
+         * @description Keyboard modifiers that must match exactly.
+         */
+        modifiers?: Modifier[];
+      };
+
+      type Modifier = "command" | "shift" | "option" | "control";
+
+      type Outcomes = {
+        /**
+         * @description Begin an action as soon as the trigger resolves. A press outcome owns the trigger until release and cannot be combined with shortPress, longPress, or swipe.
+         */
+        press?: PressAction;
+
+        /**
+         * @description Execute when a release ends the active button gesture before another outcome commits.
+         */
+        shortPress?: Action;
+
+        /**
+         * @description Execute when the global long-press duration is reached.
+         */
+        longPress?: Action;
+
+        /**
+         * @description Execute when pointer movement crosses the global swipe threshold while the trigger is held.
+         */
+        swipe?: SwipeActions;
+      };
+
+      type PressAction = {
+        /**
+         * @description The action controlled by the pressed/released lifecycle.
+         */
+        action: Action;
+
+        /**
+         * @description Execute once on press, repeat until release, hold keyboard keys until release, or remap a complete physical mouse-button stream.
+         */
+        behavior: "perform" | "repeat" | "hold" | "remap";
+      };
+
+      type SwipeActions = {
+        up?: Action;
+        down?: Action;
+        left?: Action;
+        right?: Action;
+      };
+
+      type Button = PhysicalButton | LogitechControlButton;
+
+      type LogitechControlButton = {
+        /**
+         * @description Logitech control button identifier.
+         */
+        kind: "logitechControl";
+
+        /**
+         * @description Logitech control ID (CID).
+         */
+        controlID: Int;
+
+        /**
+         * @description Match a specific Logitech device product ID when needed.
+         */
+        productID?: HexString | Int;
+
+        /**
+         * @description Match a specific Logitech device serial number when needed.
+         */
+        serialNumber?: string;
+      };
+
+      type Action =
+        | SimpleAction
+        | Run
+        | MouseWheelScrollUpWithDistance
+        | MouseWheelScrollDownWithDistance
+        | MouseWheelScrollLeftWithDistance
+        | MouseWheelScrollRightWithDistance
+        | KeyPress;
+
+      type SimpleAction =
+        | Auto
+        | None
+        | MissionControlSpaceLeft
+        | MissionControlSpaceRight
+        | MissionControl
+        | AppExpose
+        | Launchpad
+        | ShowDesktop
+        | LookUpAndDataDetectors
+        | SmartZoom
+        | WindowMaximize
+        | WindowMinimize
+        | DisplayBrightnessUp
+        | DisplayBrightnessDown
+        | MediaVolumeUp
+        | MediaVolumeDown
+        | MediaMute
+        | MediaPlayPause
+        | MediaNext
+        | MediaPrevious
+        | MediaFastForward
+        | MediaRewind
+        | KeyboardBrightnessUp
+        | KeyboardBrightnessDown
+        | MouseWheelScrollUp
+        | MouseWheelScrollDown
+        | MouseWheelScrollLeft
+        | MouseWheelScrollRight
+        | MouseButtonLeft
+        | MouseButtonMiddle
+        | MouseButtonRight
+        | MouseButtonBack
+        | MouseButtonForward;
+
+      /**
+       * @description Do not modify the button behavior.
+       */
+      type Auto = "auto";
+
+      /**
+       * @description Prevent the button events.
+       */
+      type None = "none";
+
+      /**
+       * @description Mission Control.
+       */
+      type MissionControl = "missionControl";
+
+      /**
+       * @description Mission Control: Move left a space.
+       */
+      type MissionControlSpaceLeft = "missionControl.spaceLeft";
+
+      /**
+       * @description Mission Control: Move right a space.
+       */
+      type MissionControlSpaceRight = "missionControl.spaceRight";
+
+      /**
+       * @description Application windows.
+       */
+      type AppExpose = "appExpose";
+
+      /**
+       * @description Launchpad.
+       */
+      type Launchpad = "launchpad";
+
+      /**
+       * @description Show desktop.
+       */
+      type ShowDesktop = "showDesktop";
+
+      /**
+       * @description Look up & data detectors.
+       */
+      type LookUpAndDataDetectors = "lookUpAndDataDetectors";
+
+      /**
+       * @description Smart zoom.
+       */
+      type SmartZoom = "smartZoom";
+      /**
+       * @description Window: Maximize.
+       */
+      type WindowMaximize = "window.maximize";
+
+      /**
+       * @description Window: Minimize.
+       */
+      type WindowMinimize = "window.minimize";
+
+      /**
+       * @description Display: Brightness up.
+       */
+      type DisplayBrightnessUp = "display.brightnessUp";
+
+      /**
+       * @description Display: Brightness down.
+       */
+      type DisplayBrightnessDown = "display.brightnessDown";
+
+      /**
+       * @description Media: Volume up.
+       */
+      type MediaVolumeUp = "media.volumeUp";
+
+      /**
+       * @description Media: Volume down.
+       */
+      type MediaVolumeDown = "media.volumeDown";
+
+      /**
+       * @description Media: Toggle mute.
+       */
+      type MediaMute = "media.mute";
+
+      /**
+       * @description Media: Play / pause.
+       */
+      type MediaPlayPause = "media.playPause";
+
+      /**
+       * @description Media: Next.
+       */
+      type MediaNext = "media.next";
+
+      /**
+       * @description Media: Previous.
+       */
+      type MediaPrevious = "media.previous";
+
+      /**
+       * @description Media: Fast forward.
+       */
+      type MediaFastForward = "media.fastForward";
+
+      /**
+       * @description Media: Rewind.
+       */
+      type MediaRewind = "media.rewind";
+
+      /**
+       * @description Keyboard: Brightness up.
+       */
+      type KeyboardBrightnessUp = "keyboard.brightnessUp";
+
+      /**
+       * @description Keyboard: Brightness down.
+       */
+      type KeyboardBrightnessDown = "keyboard.brightnessDown";
+
+      /**
+       * @description Mouse: Wheel: Scroll up.
+       */
+      type MouseWheelScrollUp = "mouse.wheel.scrollUp";
+
+      /**
+       * @description Mouse: Wheel: Scroll down.
+       */
+      type MouseWheelScrollDown = "mouse.wheel.scrollDown";
+
+      /**
+       * @description Mouse: Wheel: Scroll left.
+       */
+      type MouseWheelScrollLeft = "mouse.wheel.scrollLeft";
+
+      /**
+       * @description Mouse: Wheel: Scroll right.
+       */
+      type MouseWheelScrollRight = "mouse.wheel.scrollRight";
+
+      /**
+       * @description Mouse: Button: Act as left button.
+       */
+      type MouseButtonLeft = "mouse.button.left";
+
+      /**
+       * @description Mouse: Button: Act as middle button.
+       */
+      type MouseButtonMiddle = "mouse.button.middle";
+
+      /**
+       * @description Mouse: Button: Act as right button.
+       */
+      type MouseButtonRight = "mouse.button.right";
+
+      /**
+       * @description Mouse: Button: Act as back button.
+       */
+      type MouseButtonBack = "mouse.button.back";
+
+      /**
+       * @description Mouse: Button: Act as forward button.
+       */
+      type MouseButtonForward = "mouse.button.forward";
+
+      type Run = {
+        /**
+         * @description Run a specific command. For example, `"open -a 'Mission Control'"`.
+         */
+        run: string;
+      };
+
+      type MouseWheelScrollUpWithDistance = {
+        /**
+         * @description Mouse: Wheel: Scroll up a certain distance.
+         */
+        "mouse.wheel.scrollUp": Scheme.Scrolling.Distance;
+      };
+
+      type MouseWheelScrollDownWithDistance = {
+        /**
+         * @description Mouse: Wheel: Scroll down a certain distance.
+         */
+        "mouse.wheel.scrollDown": Scheme.Scrolling.Distance;
+      };
+
+      type MouseWheelScrollLeftWithDistance = {
+        /**
+         * @description Mouse: Wheel: Scroll left a certain distance.
+         */
+        "mouse.wheel.scrollLeft": Scheme.Scrolling.Distance;
+      };
+
+      type MouseWheelScrollRightWithDistance = {
+        /**
+         * @description Mouse: Wheel: Scroll right a certain distance.
+         */
+        "mouse.wheel.scrollRight": Scheme.Scrolling.Distance;
+      };
+
+      type KeyPress = {
+        /**
+         * @description Keyboard: Keyboard shortcut.
+         */
+        keyPress: Array<Key>;
+      };
+
+      /**
+       * @description Scroll direction.
+       */
+      type ScrollDirection = "up" | "down" | "left" | "right";
+
+      type Key =
+        | "enter"
+        | "tab"
+        | "space"
+        | "delete"
+        | "escape"
+        | "command"
+        | "shift"
+        | "capsLock"
+        | "option"
+        | "control"
+        | "commandRight"
+        | "shiftRight"
+        | "optionRight"
+        | "controlRight"
+        | "arrowLeft"
+        | "arrowRight"
+        | "arrowDown"
+        | "arrowUp"
+        | "home"
+        | "pageUp"
+        | "backspace"
+        | "end"
+        | "pageDown"
+        | "f1"
+        | "f2"
+        | "f3"
+        | "f4"
+        | "f5"
+        | "f6"
+        | "f7"
+        | "f8"
+        | "f9"
+        | "f10"
+        | "f11"
+        | "f12"
+        | "f13"
+        | "f14"
+        | "f15"
+        | "f16"
+        | "f17"
+        | "f18"
+        | "f19"
+        | "f20"
+        | "a"
+        | "b"
+        | "c"
+        | "d"
+        | "e"
+        | "f"
+        | "g"
+        | "h"
+        | "i"
+        | "j"
+        | "k"
+        | "l"
+        | "m"
+        | "n"
+        | "o"
+        | "p"
+        | "q"
+        | "r"
+        | "s"
+        | "t"
+        | "u"
+        | "v"
+        | "w"
+        | "x"
+        | "y"
+        | "z"
+        | "0"
+        | "1"
+        | "2"
+        | "3"
+        | "4"
+        | "5"
+        | "6"
+        | "7"
+        | "8"
+        | "9"
+        | "="
+        | "-"
+        | ";"
+        | "'"
+        | ","
+        | "."
+        | "/"
+        | "\\"
+        | "`"
+        | "["
+        | "]"
+        | "numpadPlus"
+        | "numpadMinus"
+        | "numpadMultiply"
+        | "numpadDivide"
+        | "numpadEnter"
+        | "numpadEquals"
+        | "numpadDecimal"
+        | "numpadClear"
+        | "numpad0"
+        | "numpad1"
+        | "numpad2"
+        | "numpad3"
+        | "numpad4"
+        | "numpad5"
+        | "numpad6"
+        | "numpad7"
+        | "numpad8"
+        | "numpad9";
+    }
+
+    type UniversalBackForward =
+      | boolean
+      | UniversalBackForward.BackOnly
+      | UniversalBackForward.ForwardOnly;
+
+    namespace UniversalBackForward {
+      /**
+       * @description Enable universal back only.
+       */
+      type BackOnly = "backOnly";
+
+      /**
+       * @description Enable universal forward only.
+       */
+      type ForwardOnly = "forwardOnly";
+    }
+
+    type ClickDebouncing = {
+      /**
+       * @description Select the existing click filter or the experimental libinput-inspired state machine.
+       * @default legacy
+       */
+      mode?: ClickDebouncing.Mode;
+
+      /**
+       * @description Enables click debouncing when greater than zero. The value is the debounce window in milliseconds for legacy mode; libinput mode uses fixed 25 ms and 12 ms windows.
+       */
+      timeout?: Int;
+
+      /**
+       * @description If the value is true, the timer will be reset on mouse up.
+       */
+      resetTimerOnMouseUp?: boolean;
+
+      /**
+       * @description Buttons to debounce in legacy mode. Libinput mode applies to all standard mouse buttons.
+       */
+      buttons?: PhysicalButton[];
+    };
+
+    namespace ClickDebouncing {
+      /**
+       * @description Use SunMouse's existing press-only click filter.
+       */
+      type Legacy = "legacy";
+
+      /**
+       * @description Use the experimental libinput press-and-release state machine with its fixed 25 ms bounce and 12 ms spurious-release windows.
+       */
+      type Libinput = "libinput";
+
+      type Mode = Legacy | Libinput;
+    }
+
+    type Gesture = {
+      /**
+       * @title Enable gesture button
+       * @description If the value is true, the gesture button feature is enabled.
+       * @default false
+       */
+      enabled?: boolean;
+
+      /**
+       * @title Trigger
+       * @description Choose the mouse button and modifier keys used to activate gestures.
+       */
+      trigger?: Gesture.Trigger;
+
+      /**
+       * @title Button
+       * @description Deprecated. Use trigger instead.
+       * @deprecated
+       */
+      button?: PhysicalButton;
+
+      /**
+       * @title Threshold
+       * @description The distance in pixels that must be dragged before triggering a gesture.
+       * @default 50
+       * @minimum 20
+       * @maximum 200
+       */
+      threshold?: Int;
+
+      /**
+       * @title Dead zone
+       * @description The tolerance in pixels for the non-dominant axis to prevent accidental gestures.
+       * @default 40
+       * @minimum 0
+       * @maximum 100
+       */
+      deadZone?: Int;
+
+      /**
+       * @title Cooldown
+       * @description The cooldown period in milliseconds between gestures to prevent double-triggering.
+       * @default 500
+       * @minimum 0
+       * @maximum 2000
+       */
+      cooldownMs?: Int;
+
+      /**
+       * @title Gesture actions
+       * @description Actions to trigger for each gesture direction.
+       */
+      actions?: Gesture.Actions;
+    };
+
+    namespace Gesture {
+      type Trigger = {
+        /**
+         * @title Button number
+         * @description The button number. See https://developer.apple.com/documentation/coregraphics/cgmousebutton
+         */
+        button: Mapping.Button;
+
+        /**
+         * @description Indicates if the command modifier key should be pressed.
+         */
+        command?: boolean;
+
+        /**
+         * @description Indicates if the shift modifier key should be pressed.
+         */
+        shift?: boolean;
+
+        /**
+         * @description Indicates if the option modifier key should be pressed.
+         */
+        option?: boolean;
+
+        /**
+         * @description Indicates if the control modifier key should be pressed.
+         */
+        control?: boolean;
+      };
+
+      type Actions = {
+        /**
+         * @title Swipe left action
+         * @description Action to trigger when dragging left.
+         * @default "missionControl.spaceLeft"
+         */
+        left?: GestureAction;
+
+        /**
+         * @title Swipe right action
+         * @description Action to trigger when dragging right.
+         * @default "missionControl.spaceRight"
+         */
+        right?: GestureAction;
+
+        /**
+         * @title Swipe up action
+         * @description Action to trigger when dragging up.
+         * @default "missionControl"
+         */
+        up?: GestureAction;
+
+        /**
+         * @title Swipe down action
+         * @description Action to trigger when dragging down.
+         * @default "appExpose"
+         */
+        down?: GestureAction;
+      };
+
+      type GestureAction =
+        | "none"
+        | "missionControl.spaceLeft"
+        | "missionControl.spaceRight"
+        | "missionControl"
+        | "appExpose"
+        | "showDesktop"
+        | "launchpad";
+    }
+  }
+}

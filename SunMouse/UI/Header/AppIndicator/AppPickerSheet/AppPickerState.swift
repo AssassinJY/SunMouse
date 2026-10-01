@@ -1,0 +1,111 @@
+// MIT License
+// Copyright (c) 2021-2026 LinearMouse
+
+import AppKit
+import Combine
+import Foundation
+
+class AppPickerState: ObservableObject {
+    static let shared: AppPickerState = .init()
+
+    private let schemeState: SchemeState = .shared
+
+    @Published var installedApps: [InstalledApp] = []
+
+    private var runningAppSet: Set<String> {
+        Set(NSWorkspace.shared.runningApplications.map(\.bundleIdentifier).compactMap(\.self))
+    }
+
+    private var configuredAppSet: Set<String> {
+        Set(schemeState.targetSpecificSchemes.reduce([String]()) { acc, element in
+            guard let app = element.element.if?.first?.app else {
+                return acc
+            }
+            return acc + [app]
+        })
+    }
+
+    private var configuredExecutableSet: Set<String> {
+        Set(schemeState.targetSpecificSchemes.reduce([String]()) { acc, element in
+            guard let processPath = element.element.if?.first?.processPath else {
+                return acc
+            }
+            return acc + [processPath]
+        })
+    }
+
+    var configuredApps: [InstalledApp] {
+        configuredAppSet
+            .map {
+                try? readInstalledApp(bundleIdentifier: $0) ??
+                    .init(
+                        bundleName: $0,
+                        bundleIdentifier: $0,
+                        bundleIcon: NSWorkspace.shared.icon(forFile: "")
+                    )
+            }
+            .compactMap(\.self)
+    }
+
+    var configuredExecutables: [String] {
+        Array(configuredExecutableSet).sorted()
+    }
+
+    private var configuredExecutableNameSet: Set<String> {
+        Set(schemeState.targetSpecificSchemes.compactMap { $0.element.if?.first?.processName })
+    }
+
+    var configuredExecutableNames: [String] {
+        Array(configuredExecutableNameSet).sorted()
+    }
+
+    var runningBundlelessProcesses: [String] {
+        let configuredExecutableNameSet = configuredExecutableNameSet
+        let names = NSWorkspace.shared
+            .runningApplications
+            .filter { $0.activationPolicy == .regular && $0.bundleIdentifier == nil }
+            .compactMap { $0.executableURL?.lastPathComponent }
+        return Array(Set(names))
+            .filter { !configuredExecutableNameSet.contains($0) }
+            .sorted()
+    }
+
+    var runningApps: [InstalledApp] {
+        let runningAppSet = runningAppSet
+        let configuredAppSet = configuredAppSet
+        return installedApps
+            .filter { runningAppSet.contains($0.bundleIdentifier) && !configuredAppSet.contains($0.bundleIdentifier) }
+    }
+
+    var otherApps: [InstalledApp] {
+        let runningAppSet = runningAppSet
+        let configuredAppSet = configuredAppSet
+        return installedApps
+            .filter { !runningAppSet.contains($0.bundleIdentifier) && !configuredAppSet.contains($0.bundleIdentifier) }
+    }
+}
+
+extension AppPickerState {
+    func refreshInstalledApps() {
+        installedApps = []
+
+        var seenBundleIdentifiers = Set<String>()
+
+        let fileManager = FileManager.default
+        for appDirURL in fileManager.urls(for: .applicationDirectory, in: .allDomainsMask) {
+            let appURLs = (try? fileManager
+                .contentsOfDirectory(at: appDirURL, includingPropertiesForKeys: nil)
+            ) ?? []
+            for appURL in appURLs {
+                guard let installedApp = try? readInstalledApp(at: appURL) else {
+                    continue
+                }
+                guard !seenBundleIdentifiers.contains(installedApp.bundleIdentifier) else {
+                    continue
+                }
+                installedApps.append(installedApp)
+                seenBundleIdentifiers.insert(installedApp.bundleIdentifier)
+            }
+        }
+    }
+}

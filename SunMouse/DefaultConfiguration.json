@@ -1,0 +1,665 @@
+{
+  "version": 1,
+  "rules": {
+    "clickInterval": 0.3,
+    "gestureLabelBackgroundColorHex": "FBF7FFFF",
+    "gestureLabelColorHex": "0067FFFF",
+    "gestureLabelPosition": "bottomCenter",
+    "gesturesEnabled": true,
+    "holdDelay": 0.45,
+    "rules": [
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 8,
+          "kind": "shortcut",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘C"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "C509D314-2FAC-40DE-B476-8EFD8C0EC984",
+        "name": "复制",
+        "trigger": {
+          "button": 1,
+          "clicks": 1,
+          "held": [],
+          "kind": "trail",
+          "modifiers": 0,
+          "path": "U"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 9,
+          "kind": "shortcut",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘V"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "3626A640-5374-46A3-A377-CF3F545CC1FD",
+        "name": "粘贴",
+        "trigger": {
+          "button": 1,
+          "clicks": 1,
+          "held": [],
+          "kind": "trail",
+          "modifiers": 0,
+          "path": "D"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "lookUpAndDataDetectors",
+          "keyCode": 0,
+          "kind": "builtin",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘A"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "8207C851-772F-4F8A-90CA-60803A6A74FC",
+        "name": "查询与快速查看",
+        "trigger": {
+          "button": 3,
+          "clicks": 1,
+          "held": [],
+          "kind": "click",
+          "modifiers": 0,
+          "path": "R"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 0,
+          "kind": "wheelPinch",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘A"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "F1093E1F-F8D0-4664-A067-82B63C802E47",
+        "name": "桌面与启动台",
+        "trigger": {
+          "button": 3,
+          "clicks": 1,
+          "held": [],
+          "kind": "wheelUp",
+          "modifiers": 0,
+          "path": "R"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 0,
+          "kind": "wheelPinch",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘A"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "445AD048-1636-4394-9D38-3BC81679CE00",
+        "name": "桌面与启动台",
+        "trigger": {
+          "button": 3,
+          "clicks": 1,
+          "held": [],
+          "kind": "wheelDown",
+          "modifiers": 0,
+          "path": "R"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 0,
+          "kind": "dragSpaces",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘A"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "25F4E925-FFC1-4E4A-8343-C6620AB10288",
+        "name": "空间与 Mission Control",
+        "trigger": {
+          "button": 3,
+          "clicks": 1,
+          "held": [],
+          "kind": "drag",
+          "modifiers": 0,
+          "path": "R"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "smartZoom",
+          "keyCode": 0,
+          "kind": "builtin",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘A"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "86C13DEF-C62A-4C25-A3DC-40BB5E8F02C6",
+        "name": "智能缩放",
+        "trigger": {
+          "button": 4,
+          "clicks": 1,
+          "held": [],
+          "kind": "click",
+          "modifiers": 0,
+          "path": "R"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 0,
+          "kind": "wheelZoom",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘A"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "6DA9E025-4FE3-4F5C-A1BB-6C3F9A0B7E55",
+        "name": "放大或缩小",
+        "trigger": {
+          "button": 4,
+          "clicks": 1,
+          "held": [],
+          "kind": "wheelUp",
+          "modifiers": 0,
+          "path": "R"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 0,
+          "kind": "wheelZoom",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘A"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "6C5CEF81-D90A-49E4-A0AD-7C7D0ABEC02D",
+        "name": "放大或缩小",
+        "trigger": {
+          "button": 4,
+          "clicks": 1,
+          "held": [],
+          "kind": "wheelDown",
+          "modifiers": 0,
+          "path": "R"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 0,
+          "kind": "dragScroll",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘A"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "CE41E1DF-6297-4F5C-B9D6-A7C268AF0B1B",
+        "name": "滚动与导航",
+        "trigger": {
+          "button": 4,
+          "clicks": 1,
+          "held": [],
+          "kind": "drag",
+          "modifiers": 0,
+          "path": "R"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 13,
+          "kind": "shortcut",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘W"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "5343416D-104B-4BED-8334-93971BCB30D0",
+        "name": "关闭窗口",
+        "trigger": {
+          "button": 1,
+          "clicks": 1,
+          "held": [],
+          "kind": "trail",
+          "modifiers": 0,
+          "path": "DR"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 13,
+          "kind": "shortcut",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘W"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "356808C3-28E4-4EC5-8C06-DF4D58384C94",
+        "name": "关闭窗口",
+        "trigger": {
+          "button": 1,
+          "clicks": 1,
+          "held": [],
+          "kind": "trail",
+          "modifiers": 0,
+          "path": "DL"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 126,
+          "kind": "shortcut",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "BCC8F2AF-DCE9-47EB-8F04-ECFAE64CD4F4",
+        "name": "Home",
+        "trigger": {
+          "button": 1,
+          "clicks": 1,
+          "held": [],
+          "kind": "trail",
+          "modifiers": 0,
+          "path": "LU"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 125,
+          "kind": "shortcut",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "F3D751DF-BC3B-461C-AEC5-B8BF0DC628AE",
+        "name": "End",
+        "trigger": {
+          "button": 1,
+          "clicks": 1,
+          "held": [],
+          "kind": "trail",
+          "modifiers": 0,
+          "path": "LD"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 0,
+          "kind": "builtin",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘A"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "B839DA43-C46A-41BC-9858-032A7FCA1FAA",
+        "name": "后退",
+        "trigger": {
+          "button": 1,
+          "clicks": 1,
+          "held": [],
+          "kind": "trail",
+          "modifiers": 0,
+          "path": "L"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.forward",
+          "keyCode": 0,
+          "kind": "builtin",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘A"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "1F95522E-7F6B-4EFD-AA6D-4911963FD635",
+        "name": "前进",
+        "trigger": {
+          "button": 1,
+          "clicks": 1,
+          "held": [],
+          "kind": "trail",
+          "modifiers": 0,
+          "path": "R"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "media.next",
+          "keyCode": 0,
+          "kind": "builtin",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘A"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "603D887A-BD90-46BA-B569-611CA9ECAFFF",
+        "name": "新规则",
+        "trigger": {
+          "button": 1,
+          "clicks": 1,
+          "held": [],
+          "kind": "trail",
+          "modifiers": 0,
+          "path": "RL"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "media.previous",
+          "keyCode": 0,
+          "kind": "builtin",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘A"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "714C110C-0DFD-4DCD-A72D-B036BDA2CFA2",
+        "name": "新规则",
+        "trigger": {
+          "button": 1,
+          "clicks": 1,
+          "held": [],
+          "kind": "trail",
+          "modifiers": 0,
+          "path": "LR"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 33,
+          "kind": "shortcut",
+          "modifiers": 1179648,
+          "script": "",
+          "shortcutLabel": "⇧⌘{"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [
+            "com.google.Chrome"
+          ],
+          "mode": "only"
+        },
+        "id": "E010C513-5F0A-4309-8013-A85293DE8368",
+        "name": "上个标签",
+        "trigger": {
+          "button": 1,
+          "clicks": 1,
+          "held": [],
+          "kind": "wheelUp",
+          "modifiers": 0,
+          "path": ""
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 30,
+          "kind": "shortcut",
+          "modifiers": 1179648,
+          "script": "",
+          "shortcutLabel": "⇧⌘}"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [
+            "com.google.Chrome"
+          ],
+          "mode": "only"
+        },
+        "id": "D6D47F9F-8CD3-44A5-8306-F806B0E9AC06",
+        "name": "下个标签",
+        "trigger": {
+          "button": 1,
+          "clicks": 1,
+          "held": [],
+          "kind": "wheelDown",
+          "modifiers": 0,
+          "path": ""
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "media.playPause",
+          "keyCode": 0,
+          "kind": "builtin",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘A"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "FBAB5D24-D57B-42C8-A639-0A10591BA1F9",
+        "name": "新规则",
+        "trigger": {
+          "button": 1,
+          "clicks": 1,
+          "held": [],
+          "kind": "trail",
+          "modifiers": 0,
+          "path": "UD"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 15,
+          "kind": "shortcut",
+          "modifiers": 1048576,
+          "script": "",
+          "shortcutLabel": "⌘R"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "3000946B-C38C-48BA-90BF-86C73D09B862",
+        "name": "新规则",
+        "trigger": {
+          "button": 1,
+          "clicks": 1,
+          "held": [],
+          "kind": "trail",
+          "modifiers": 0,
+          "path": "LUR"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      },
+      {
+        "action": {
+          "builtin": "mouse.button.back",
+          "keyCode": 18,
+          "kind": "shortcut",
+          "modifiers": 262144,
+          "script": "",
+          "shortcutLabel": "⌃1"
+        },
+        "enabled": true,
+        "filter": {
+          "applications": [],
+          "mode": "all"
+        },
+        "id": "55F25623-8DE2-42E1-ABB2-C520CB4BAA43",
+        "name": "新规则",
+        "trigger": {
+          "button": 1,
+          "clicks": 1,
+          "held": [],
+          "kind": "trail",
+          "modifiers": 0,
+          "path": "LURD"
+        },
+        "wheelInterval": 0.12,
+        "wheelRepeat": true
+      }
+    ],
+    "showTrail": true,
+    "trailColorHex": "007AFFD9",
+    "trailThreshold": 18,
+    "version": 1
+  },
+  "devices": {
+    "$schema": "https://schema.linearmouse.app/0.1.0",
+    "schemes": [
+      {
+        "if": {
+          "device": {
+            "category": "mouse"
+          }
+        },
+        "scrolling": {
+          "smoothed": {
+            "acceleration": 1.1,
+            "bouncing": true,
+            "enabled": true,
+            "inertia": 0.74,
+            "preset": "easeInOut",
+            "response": 0.68,
+            "speed": 1.02
+          }
+        }
+      }
+    ]
+  }
+}

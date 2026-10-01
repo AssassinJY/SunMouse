@@ -1,0 +1,9 @@
+# Third-party notices
+
+SunMouse is a personal macOS utility, derived from LinearMouse. It is not an official release of any referenced project.
+
+- **LinearMouse** — https://github.com/linearmouse/linearmouse, reference commit `fc7d920a8f76d3252b28518f043058e138b0afd2`, MIT. Device management, pointer control, event processing, scrolling, settings infrastructure and bundled modules are retained/adapted. Original copyright headers and the complete license are retained in `Licenses/LinearMouse-MIT.txt` and `LICENSE`.
+- **Mac Mouse Fix** — https://github.com/noah-nuebling/mac-mouse-fix, reference commit `0c0fc99e65b3b09e083cbedc71c4d83fe21d1075`. The discrete-wheel finite-distance animation, tick-frequency acceleration, direction-change braking, gesture/momentum phase delivery, and native continuous-event bypass are derived from `Helper/Core/Scroll/Scroll.m`, `ScrollAnalyzer.m`, the TouchAnimator design, `Helper/Core/Config/ScrollConfig.swift`, and `Shared/Math/Curves/{HybridCurves,DragCurve,BezierCappedAccelerationCurve,ScrollSpeedupCurve}.swift`. The native continuous Dock gesture implementation (`SMNativeGestures.m`) is adapted from the protocol/field mapping in `Helper/Core/Touch/TouchSimulator.m`. These adaptations use the MMF License; full license: `Licenses/MMF-License.txt`. Side-button and modifier interactions also reference this project.
+- **MacGesture** — https://github.com/AssassinJY/MacGesture, reference commit `9f7f5d4ce74f14eec439923f6d1f75264c7550c7`. Behavior reference for directional gestures and application filtering. No MacGesture source files are copied into SunMouse.
+
+The original MIT license does not relicense the separately identified MMF-derived file. Review the applicable licenses before any redistribution. Dependency versions are pinned in `SunMouse.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved`; dependency license notices remain in their respective source packages.

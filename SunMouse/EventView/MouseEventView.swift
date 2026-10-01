@@ -1,0 +1,53 @@
+// MIT License
+// Copyright (c) 2021-2026 LinearMouse
+
+import AppKit
+import Foundation
+
+class MouseEventView: EventView {
+    var mouseButton: CGMouseButton? {
+        get {
+            guard let mouseButtonNumber = UInt32(exactly: event.getIntegerValueField(.mouseEventButtonNumber)) else {
+                return nil
+            }
+            return CGMouseButton(rawValue: mouseButtonNumber)!
+        }
+
+        set {
+            guard let newValue else {
+                return
+            }
+
+            event.type = newValue.fixedCGEventType(of: event.type)
+            event.setIntegerValueField(.mouseEventButtonNumber, value: Int64(newValue.rawValue))
+        }
+    }
+
+    var mouseButtonDescription: String {
+        guard let mouseButton else {
+            return "(nil)"
+        }
+
+        return (modifiers + ["<button \(mouseButton.rawValue)>"]).joined(separator: "+")
+    }
+
+    var sourcePid: pid_t? {
+        let pid = pid_t(event.getIntegerValueField(.eventSourceUnixProcessID))
+        guard pid > 0 else {
+            return nil
+        }
+        return pid
+    }
+
+    var targetPid: pid_t? {
+        let pid = pid_t(event.getIntegerValueField(.eventTargetUnixProcessID))
+        guard pid > 0 else {
+            return nil
+        }
+        return pid
+    }
+
+    var mouseLocationOwnerPid: pid_t? {
+        event.location.topmostWindowOwnerPid
+    }
+}

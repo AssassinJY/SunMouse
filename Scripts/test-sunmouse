@@ -1,0 +1,4 @@
+#!/bin/zsh
+set -euo pipefail
+cd "${0:A:h:h}"
+xcodebuild -project SunMouse.xcodeproj -scheme SunMouse -configuration Debug -derivedDataPath build test CODE_SIGN_IDENTITY=- MACOSX_DEPLOYMENT_TARGET=26.0

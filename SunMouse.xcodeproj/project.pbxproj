@@ -1,0 +1,711 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 70;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		9724FACA2A3E04DE00622F5A /* KeyKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9724FAC92A3E04DE00622F5A /* KeyKit */; };
+		972A5E30285D891100CB6440 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 972A5E2F285D891100CB6440 /* Defaults */; };
+		975979DB2A6BA1A700016EDF /* ObservationToken in Frameworks */ = {isa = PBXBuildFile; productRef = 975979DA2A6BA1A700016EDF /* ObservationToken */; };
+		977638F9286BE9EE00A698B6 /* PublishedObject in Frameworks */ = {isa = PBXBuildFile; productRef = 977638F8286BE9EE00A698B6 /* PublishedObject */; };
+		978DBCA629AB1732002259B3 /* JSONPatcher in Frameworks */ = {isa = PBXBuildFile; productRef = 978DBCA529AB1732002259B3 /* JSONPatcher */; };
+		97A7A39C28587E8C00EE4833 /* PointerKit in Frameworks */ = {isa = PBXBuildFile; productRef = 97A7A39B28587E8C00EE4833 /* PointerKit */; };
+		97C5D8FF2856E3CB00CBED2D /* GestureKit in Frameworks */ = {isa = PBXBuildFile; productRef = 97C5D8FE2856E3CB00CBED2D /* GestureKit */; };
+		97C97728288FC49F009094BA /* DockKit in Frameworks */ = {isa = PBXBuildFile; productRef = 97C97727288FC49F009094BA /* DockKit */; };
+		97FC692F29F44D0100859859 /* AppMover in Frameworks */ = {isa = PBXBuildFile; productRef = 97FC692E29F44D0100859859 /* AppMover */; };
+		97FD5B552CCDF2A600125BFE /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 97FD5B542CCDF2A600125BFE /* Sparkle */; };
+		D2D2D2D2D2D2D2D2D2D2D2D2 /* HIDPP in Frameworks */ = {isa = PBXBuildFile; productRef = D1D1D1D1D1D1D1D1D1D1D1D1 /* HIDPP */; };
+		B70A58F6284F987900E5C86E /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = B70A58F5284F987900E5C86E /* LaunchAtLogin */; };
+		B73AC55127C29C7C00F7D3E8 /* Version in Frameworks */ = {isa = PBXBuildFile; productRef = B73AC55027C29C7C00F7D3E8 /* Version */; };
+		B7F6C5F827A4F6A800E5400B /* LRUCache in Frameworks */ = {isa = PBXBuildFile; productRef = B7F6C5F727A4F6A800E5400B /* LRUCache */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B7ADF9992748ED620005B02D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B75A06102671E9D800BEAF77 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B75A06172671E9D800BEAF77;
+			remoteInfo = SunMouse;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		B716F16226BC18AB0052F551 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		B716F16326BC19350052F551 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		B75A06182671E9D800BEAF77 /* SunMouse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SunMouse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7ADF9952748ED620005B02D /* SunMouseUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SunMouseUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7CD86AB27B38B26006C5C37 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		973B4AE52CCDF18A0029D1CA /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B75A06172671E9D800BEAF77 /* SunMouse */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		973B49702CCDF1550029D1CA /* Modules */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Modules; sourceTree = "<group>"; };
+		973B497D2CCDF15F0029D1CA /* SunMouseUnitTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SunMouseUnitTests; sourceTree = "<group>"; };
+		973B4A692CCDF18A0029D1CA /* SunMouse */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (973B4AE52CCDF18A0029D1CA /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = SunMouse; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B75A06152671E9D800BEAF77 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				977638F9286BE9EE00A698B6 /* PublishedObject in Frameworks */,
+				978DBCA629AB1732002259B3 /* JSONPatcher in Frameworks */,
+				B70A58F6284F987900E5C86E /* LaunchAtLogin in Frameworks */,
+				9724FACA2A3E04DE00622F5A /* KeyKit in Frameworks */,
+				97C97728288FC49F009094BA /* DockKit in Frameworks */,
+				97FD5B552CCDF2A600125BFE /* Sparkle in Frameworks */,
+				97FC692F29F44D0100859859 /* AppMover in Frameworks */,
+				972A5E30285D891100CB6440 /* Defaults in Frameworks */,
+				97A7A39C28587E8C00EE4833 /* PointerKit in Frameworks */,
+				D2D2D2D2D2D2D2D2D2D2D2D2 /* HIDPP in Frameworks */,
+				97C5D8FF2856E3CB00CBED2D /* GestureKit in Frameworks */,
+				B73AC55127C29C7C00F7D3E8 /* Version in Frameworks */,
+				975979DB2A6BA1A700016EDF /* ObservationToken in Frameworks */,
+				B7F6C5F827A4F6A800E5400B /* LRUCache in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B7ADF9922748ED620005B02D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		97C5D8F72856E18900CBED2D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B75A060F2671E9D800BEAF77 = {
+			isa = PBXGroup;
+			children = (
+				B7CD86AB27B38B26006C5C37 /* Config.xcconfig */,
+				973B4A692CCDF18A0029D1CA /* SunMouse */,
+				973B49702CCDF1550029D1CA /* Modules */,
+				B716F16326BC19350052F551 /* LICENSE */,
+				B716F16226BC18AB0052F551 /* README.md */,
+				973B497D2CCDF15F0029D1CA /* SunMouseUnitTests */,
+				B75A06192671E9D800BEAF77 /* Products */,
+				97C5D8F72856E18900CBED2D /* Frameworks */,
+			);
+			indentWidth = 4;
+			sourceTree = "<group>";
+			tabWidth = 4;
+		};
+		B75A06192671E9D800BEAF77 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B75A06182671E9D800BEAF77 /* SunMouse.app */,
+				B7ADF9952748ED620005B02D /* SunMouseUnitTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B75A06172671E9D800BEAF77 /* SunMouse */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B75A062B2671E9DA00BEAF77 /* Build configuration list for PBXNativeTarget "SunMouse" */;
+			buildPhases = (
+				B75A06142671E9D800BEAF77 /* Sources */,
+				B75A06152671E9D800BEAF77 /* Frameworks */,
+				B75A06162671E9D800BEAF77 /* Resources */,
+				B70A58F7284F988B00E5C86E /* Copy “Launch at Login Helper” */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				973B4A692CCDF18A0029D1CA /* SunMouse */,
+			);
+			name = SunMouse;
+			packageProductDependencies = (
+				B7F6C5F727A4F6A800E5400B /* LRUCache */,
+				B73AC55027C29C7C00F7D3E8 /* Version */,
+				B70A58F5284F987900E5C86E /* LaunchAtLogin */,
+				97C5D8FE2856E3CB00CBED2D /* GestureKit */,
+				97A7A39B28587E8C00EE4833 /* PointerKit */,
+				D1D1D1D1D1D1D1D1D1D1D1D1 /* HIDPP */,
+				972A5E2F285D891100CB6440 /* Defaults */,
+				977638F8286BE9EE00A698B6 /* PublishedObject */,
+				97C97727288FC49F009094BA /* DockKit */,
+				978DBCA529AB1732002259B3 /* JSONPatcher */,
+				97FC692E29F44D0100859859 /* AppMover */,
+				9724FAC92A3E04DE00622F5A /* KeyKit */,
+				975979DA2A6BA1A700016EDF /* ObservationToken */,
+				97FD5B542CCDF2A600125BFE /* Sparkle */,
+			);
+			productName = SunMouse;
+			productReference = B75A06182671E9D800BEAF77 /* SunMouse.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B7ADF9942748ED620005B02D /* SunMouseUnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B7ADF99D2748ED620005B02D /* Build configuration list for PBXNativeTarget "SunMouseUnitTests" */;
+			buildPhases = (
+				B7ADF9912748ED620005B02D /* Sources */,
+				B7ADF9922748ED620005B02D /* Frameworks */,
+				B7ADF9932748ED620005B02D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B7ADF99A2748ED620005B02D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				973B497D2CCDF15F0029D1CA /* SunMouseUnitTests */,
+			);
+			name = SunMouseUnitTests;
+			productName = SunMouseUnitTests;
+			productReference = B7ADF9952748ED620005B02D /* SunMouseUnitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B75A06102671E9D800BEAF77 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1310;
+				LastUpgradeCheck = 1420;
+				TargetAttributes = {
+					B75A06172671E9D800BEAF77 = {
+						CreatedOnToolsVersion = 12.5;
+					};
+					B7ADF9942748ED620005B02D = {
+						CreatedOnToolsVersion = 13.1;
+						TestTargetID = B75A06172671E9D800BEAF77;
+					};
+				};
+			};
+			buildConfigurationList = B75A06132671E9D800BEAF77 /* Build configuration list for PBXProject "SunMouse" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+				"zh-Hant",
+				ru,
+				de,
+				af,
+				hu,
+				ko,
+				it,
+				"nb-NO",
+				ro,
+				cs,
+				el,
+				es,
+				pt,
+				da,
+				vi,
+				ja,
+				ca,
+				pl,
+				"pt-BR",
+				uk,
+				he,
+				sr,
+				tr,
+				ar,
+				sv,
+				fi,
+				fr,
+				nl,
+				sk,
+				my,
+				"zh-Hant-HK",
+			);
+			mainGroup = B75A060F2671E9D800BEAF77;
+			packageReferences = (
+				B784292B278DB06600D207F0 /* XCRemoteSwiftPackageReference "Sparkle" */,
+				B7F6C5F627A4F6A800E5400B /* XCRemoteSwiftPackageReference "LRUCache" */,
+				B73AC54F27C29C7C00F7D3E8 /* XCRemoteSwiftPackageReference "Version" */,
+				B70A58F4284F987900E5C86E /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
+				972A5E2E285D891100CB6440 /* XCRemoteSwiftPackageReference "Defaults" */,
+				977638F7286BE9EE00A698B6 /* XCRemoteSwiftPackageReference "PublishedObject" */,
+				978DBCA429AB1732002259B3 /* XCRemoteSwiftPackageReference "JSONPatcher" */,
+				97FC692B29F44CE000859859 /* XCRemoteSwiftPackageReference "AppMover" */,
+			);
+			productRefGroup = B75A06192671E9D800BEAF77 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B75A06172671E9D800BEAF77 /* SunMouse */,
+				B7ADF9942748ED620005B02D /* SunMouseUnitTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B75A06162671E9D800BEAF77 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B7ADF9932748ED620005B02D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B70A58F7284F988B00E5C86E /* Copy “Launch at Login Helper” */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy “Launch at Login Helper”";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "\"${BUILT_PRODUCTS_DIR}/LaunchAtLogin_LaunchAtLogin.bundle/Contents/Resources/copy-helper-swiftpm.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B75A06142671E9D800BEAF77 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B7ADF9912748ED620005B02D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B7ADF99A2748ED620005B02D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B75A06172671E9D800BEAF77 /* SunMouse */;
+			targetProxy = B7ADF9992748ED620005B02D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		B75A06292671E9DA00BEAF77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B7CD86AB27B38B26006C5C37 /* Config.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = "$(LM_DEPLOYMENT_TARGET)";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B75A062A2671E9DA00BEAF77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B7CD86AB27B38B26006C5C37 /* Config.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = "$(LM_DEPLOYMENT_TARGET)";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		B75A062C2671E9DA00BEAF77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SunMouse/SunMouse.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = SunMouse/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = "$(LM_DEPLOYMENT_TARGET)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "SunMouse/SunMouse-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		B75A062D2671E9DA00BEAF77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SunMouse/SunMouse.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = SunMouse/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = "$(LM_DEPLOYMENT_TARGET)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "SunMouse/SunMouse-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		B7ADF99B2748ED620005B02D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = local.sun.SunMouseUnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SunMouse.app/Contents/MacOS/SunMouse";
+			};
+			name = Debug;
+		};
+		B7ADF99C2748ED620005B02D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = local.sun.SunMouseUnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SunMouse.app/Contents/MacOS/SunMouse";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B75A06132671E9D800BEAF77 /* Build configuration list for PBXProject "SunMouse" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B75A06292671E9DA00BEAF77 /* Debug */,
+				B75A062A2671E9DA00BEAF77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B75A062B2671E9DA00BEAF77 /* Build configuration list for PBXNativeTarget "SunMouse" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B75A062C2671E9DA00BEAF77 /* Debug */,
+				B75A062D2671E9DA00BEAF77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B7ADF99D2748ED620005B02D /* Build configuration list for PBXNativeTarget "SunMouseUnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B7ADF99B2748ED620005B02D /* Debug */,
+				B7ADF99C2748ED620005B02D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		972A5E2E285D891100CB6440 /* XCRemoteSwiftPackageReference "Defaults" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/Defaults";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		977638F7286BE9EE00A698B6 /* XCRemoteSwiftPackageReference "PublishedObject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Amzd/PublishedObject";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.0;
+			};
+		};
+		978DBCA429AB1732002259B3 /* XCRemoteSwiftPackageReference "JSONPatcher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/linearmouse/JSONPatcher.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		97FC692B29F44CE000859859 /* XCRemoteSwiftPackageReference "AppMover" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/linearmouse/AppMover";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		B70A58F4284F987900E5C86E /* XCRemoteSwiftPackageReference "LaunchAtLogin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		B73AC54F27C29C7C00F7D3E8 /* XCRemoteSwiftPackageReference "Version" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mrackwitz/Version.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.8.0;
+			};
+		};
+		B784292B278DB06600D207F0 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lujjjh/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		B7F6C5F627A4F6A800E5400B /* XCRemoteSwiftPackageReference "LRUCache" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nicklockwood/LRUCache.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9724FAC92A3E04DE00622F5A /* KeyKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KeyKit;
+		};
+		972A5E2F285D891100CB6440 /* Defaults */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 972A5E2E285D891100CB6440 /* XCRemoteSwiftPackageReference "Defaults" */;
+			productName = Defaults;
+		};
+		975979DA2A6BA1A700016EDF /* ObservationToken */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ObservationToken;
+		};
+		977638F8286BE9EE00A698B6 /* PublishedObject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 977638F7286BE9EE00A698B6 /* XCRemoteSwiftPackageReference "PublishedObject" */;
+			productName = PublishedObject;
+		};
+		978DBCA529AB1732002259B3 /* JSONPatcher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 978DBCA429AB1732002259B3 /* XCRemoteSwiftPackageReference "JSONPatcher" */;
+			productName = JSONPatcher;
+		};
+		97A7A39B28587E8C00EE4833 /* PointerKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PointerKit;
+		};
+		D1D1D1D1D1D1D1D1D1D1D1D1 /* HIDPP */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HIDPP;
+		};
+		97C5D8FE2856E3CB00CBED2D /* GestureKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GestureKit;
+		};
+		97C97727288FC49F009094BA /* DockKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DockKit;
+		};
+		97FC692E29F44D0100859859 /* AppMover */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 97FC692B29F44CE000859859 /* XCRemoteSwiftPackageReference "AppMover" */;
+			productName = AppMover;
+		};
+		97FD5B542CCDF2A600125BFE /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B784292B278DB06600D207F0 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+		B70A58F5284F987900E5C86E /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B70A58F4284F987900E5C86E /* XCRemoteSwiftPackageReference "LaunchAtLogin" */;
+			productName = LaunchAtLogin;
+		};
+		B73AC55027C29C7C00F7D3E8 /* Version */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B73AC54F27C29C7C00F7D3E8 /* XCRemoteSwiftPackageReference "Version" */;
+			productName = Version;
+		};
+		B7F6C5F727A4F6A800E5400B /* LRUCache */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B7F6C5F627A4F6A800E5400B /* XCRemoteSwiftPackageReference "LRUCache" */;
+			productName = LRUCache;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = B75A06102671E9D800BEAF77 /* Project object */;
+}

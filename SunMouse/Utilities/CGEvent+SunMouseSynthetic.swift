@@ -1,0 +1,152 @@
+// MIT License
+// Copyright (c) 2021-2026 LinearMouse
+
+import CoreGraphics
+import Foundation
+
+struct LogitechControlIdentity: Codable, Equatable, Hashable {
+    static let kind = "logitechControl"
+
+    var controlID: Int
+    var productID: Int?
+    var serialNumber: String?
+}
+
+extension LogitechControlIdentity {
+    var specificityScore: Int {
+        if serialNumber != nil {
+            return 2
+        }
+
+        if productID != nil {
+            return 1
+        }
+
+        return 0
+    }
+
+    var userVisibleName: String {
+        String(format: "Logitech Control 0x%04X", controlID)
+    }
+
+    var controlIDValue: UInt16? {
+        UInt16(exactly: controlID)
+    }
+
+    func matches(_ configured: LogitechControlIdentity, allowingIdentityFallback: Bool = false) -> Bool {
+        guard controlID == configured.controlID else {
+            return false
+        }
+
+        if let configuredSerialNumber = configured.serialNumber {
+            if let serialNumber {
+                return serialNumber.caseInsensitiveCompare(configuredSerialNumber) == .orderedSame
+            }
+
+            if allowingIdentityFallback,
+               let configuredProductID = configured.productID,
+               let productID {
+                return productID == configuredProductID
+            }
+
+            return false
+        }
+
+        if let configuredProductID = configured.productID {
+            guard let productID else {
+                return false
+            }
+            return productID == configuredProductID
+        }
+
+        return true
+    }
+}
+
+extension LogitechControlIdentity {
+    private enum CodingKeys: String, CodingKey {
+        case kind
+        case controlID
+        case productID
+        case serialNumber
+        case logicalDeviceProductID
+        case logicalDeviceSerialNumber
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        controlID = try container.decode(Int.self, forKey: .controlID)
+        productID = try decodeProductID(in: container, keys: [.productID, .logicalDeviceProductID])
+        serialNumber = try container.decodeIfPresent(String.self, forKey: .serialNumber)
+            ?? container.decodeIfPresent(String.self, forKey: .logicalDeviceSerialNumber)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(Self.kind, forKey: .kind)
+        try container.encode(controlID, forKey: .controlID)
+        try container.encodeIfPresent(productID, forKey: .productID)
+        try container.encodeIfPresent(serialNumber, forKey: .serialNumber)
+    }
+
+    private func decodeProductID(
+        in container: KeyedDecodingContainer<CodingKeys>,
+        keys: [CodingKeys]
+    ) throws -> Int? {
+        for key in keys {
+            if let value = try? container.decode(Int.self, forKey: key) {
+                return value
+            }
+
+            if let hexValue = try? container.decode(String.self, forKey: key) {
+                let normalized = hexValue.hasPrefix("0x") ? String(hexValue.dropFirst(2)) : hexValue
+                guard let parsed = Int(normalized, radix: 16) else {
+                    throw CustomDecodingError(in: container, error: ValueError.invalidProductID)
+                }
+                return parsed
+            }
+        }
+
+        return nil
+    }
+
+    private enum ValueError: LocalizedError {
+        case invalidProductID
+
+        var errorDescription: String? {
+            switch self {
+            case .invalidProductID:
+                return NSLocalizedString("Invalid Logitech productID", comment: "")
+            }
+        }
+    }
+}
+
+extension CGEvent {
+    static let linearMouseSyntheticEventUserData: Int64 = 0x534D_4F4F_5448
+    private static let gestureCleanupReleaseUserData: Int64 = 0x4745_5354_5552
+
+    var isSunMouseSyntheticEvent: Bool {
+        get {
+            getIntegerValueField(.eventSourceUserData) == Self.linearMouseSyntheticEventUserData
+        }
+        set {
+            setIntegerValueField(
+                .eventSourceUserData,
+                value: newValue ? Self.linearMouseSyntheticEventUserData : 0
+            )
+        }
+    }
+
+    var isGestureCleanupRelease: Bool {
+        get {
+            getIntegerValueField(.eventSourceUserData) == Self.gestureCleanupReleaseUserData
+        }
+        set {
+            setIntegerValueField(
+                .eventSourceUserData,
+                value: newValue ? Self.gestureCleanupReleaseUserData : 0
+            )
+        }
+    }
+}

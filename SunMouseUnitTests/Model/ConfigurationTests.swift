@@ -1,0 +1,455 @@
+// MIT License
+// Copyright (c) 2021-2026 LinearMouse
+
+@testable import SunMouse
+import XCTest
+
+final class ConfigurationTests: XCTestCase {
+    func testDump() throws {
+        try print(Configuration(schemes: []).dump())
+    }
+
+    func testUsesProcessConditions() {
+        XCTAssertFalse(Configuration(schemes: []).usesProcessConditions)
+        XCTAssertFalse(Configuration(schemes: [Scheme(if: [.init(display: "Built-in Display")])]).usesProcessConditions)
+        XCTAssertTrue(Configuration(schemes: [Scheme(if: [.init(app: "com.apple.finder")])]).usesProcessConditions)
+        XCTAssertTrue(Configuration(schemes: [Scheme(if: [.init(processPath: "/Applications/Foo.app/Foo")])])
+            .usesProcessConditions)
+    }
+
+    func testMergeScheme() {
+        var scheme = Scheme()
+
+        XCTAssertNil(scheme.$scrolling)
+
+        Scheme(scrolling: .init(reverse: .init(vertical: true))).merge(into: &scheme)
+
+        XCTAssertEqual(scheme.scrolling.reverse.vertical, true)
+        XCTAssertNil(scheme.scrolling.reverse.horizontal)
+
+        Scheme(scrolling: .init(reverse: .init(vertical: false, horizontal: true))).merge(into: &scheme)
+
+        XCTAssertEqual(scheme.scrolling.reverse.vertical, false)
+        XCTAssertEqual(scheme.scrolling.reverse.horizontal, true)
+
+        Scheme(scrolling: .init(reverse: .init(vertical: true))).merge(into: &scheme)
+
+        XCTAssertEqual(scheme.scrolling.reverse.vertical, true)
+        XCTAssertEqual(scheme.scrolling.reverse.horizontal, true)
+    }
+
+    func testMergeLogitechSettings() {
+        var scheme = Scheme()
+
+        XCTAssertNil(scheme.$logitech)
+
+        var base = Scheme()
+        base.logitech.highResolutionWheel = true
+        base.merge(into: &scheme)
+
+        XCTAssertEqual(scheme.logitech.highResolutionWheel, true)
+
+        var override = Scheme()
+        override.logitech.highResolutionWheel = false
+        override.merge(into: &scheme)
+
+        XCTAssertEqual(scheme.logitech.highResolutionWheel, false)
+    }
+
+    func testMatchSchemeWithDeviceCategoryDoesNotMergeDeviceSpecificSchemes() {
+        var categoryScheme = Scheme(if: [.init(device: DeviceMatcher(category: .mouse))])
+        categoryScheme.pointer.disableAcceleration = true
+
+        var specificMatcher = DeviceMatcher(category: .mouse)
+        specificMatcher.vendorID = 1
+        specificMatcher.productID = 2
+
+        var deviceSpecificScheme = Scheme(if: [.init(device: specificMatcher)])
+        deviceSpecificScheme.pointer.disableAcceleration = false
+
+        let configuration = Configuration(schemes: [categoryScheme, deviceSpecificScheme])
+        let matchedScheme = configuration.matchScheme(withDeviceMatcher: DeviceMatcher(category: .mouse))
+
+        XCTAssertEqual(matchedScheme.pointer.disableAcceleration, true)
+    }
+
+    func testMatchSchemeWithSpecificDeviceMatcherMergesDeviceCategorySchemes() {
+        var categoryScheme = Scheme(if: [.init(device: DeviceMatcher(category: .mouse))])
+        categoryScheme.pointer.disableAcceleration = true
+        categoryScheme.scrolling.reverse.vertical = true
+
+        var specificMatcher = DeviceMatcher(category: .mouse)
+        specificMatcher.vendorID = 1
+        specificMatcher.productID = 2
+
+        var deviceSpecificScheme = Scheme(if: [.init(device: specificMatcher)])
+        deviceSpecificScheme.pointer.disableAcceleration = false
+
+        let configuration = Configuration(schemes: [categoryScheme, deviceSpecificScheme])
+        let matchedScheme = configuration.matchScheme(withDeviceMatcher: specificMatcher)
+
+        XCTAssertEqual(matchedScheme.pointer.disableAcceleration, false)
+        XCTAssertEqual(matchedScheme.scrolling.reverse.vertical, true)
+    }
+
+    func testDeviceCategorySchemeInsertsBeforeDeviceSpecificSchemes() {
+        var specificMatcher = DeviceMatcher(category: .mouse)
+        specificMatcher.vendorID = 1
+        specificMatcher.productID = 2
+
+        let schemes = [Scheme(if: [.init(device: specificMatcher)])]
+        let index = schemes.schemeIndex(
+            ofDeviceCategory: .mouse,
+            ofApp: nil,
+            ofProcessPath: nil,
+            ofProcessName: nil,
+            ofDisplay: nil
+        )
+
+        guard case let .insertAt(insertIndex) = index else {
+            XCTFail("Expected insertion index")
+            return
+        }
+
+        XCTAssertEqual(insertIndex, 0)
+    }
+
+    func testSchemeIndexMatchesProcessNameWithoutCrossMatching() {
+        var matcher = DeviceMatcher(category: .mouse)
+        matcher.vendorID = 1
+        matcher.productID = 2
+
+        // The device-only scheme comes last so that a lookup without app conditions
+        // has to skip the processName and processPath schemes to reach it.
+        let schemes = [
+            Scheme(if: [.init(device: matcher, processName: "Foo.exe")]),
+            Scheme(if: [.init(device: matcher, processPath: "/tmp/Foo.exe")]),
+            Scheme(if: [.init(device: matcher)])
+        ]
+
+        XCTAssertEqual(
+            schemes.schemeIndex(
+                ofDeviceMatcher: matcher,
+                ofApp: nil,
+                ofProcessPath: nil,
+                ofProcessName: "Foo.exe",
+                ofDisplay: nil
+            ),
+            .at(0)
+        )
+        XCTAssertEqual(
+            schemes.schemeIndex(
+                ofDeviceMatcher: matcher,
+                ofApp: nil,
+                ofProcessPath: "/tmp/Foo.exe",
+                ofProcessName: nil,
+                ofDisplay: nil
+            ),
+            .at(1)
+        )
+        XCTAssertEqual(
+            schemes.schemeIndex(
+                ofDeviceMatcher: matcher,
+                ofApp: nil,
+                ofProcessPath: nil,
+                ofProcessName: nil,
+                ofDisplay: nil
+            ),
+            .at(2)
+        )
+        XCTAssertEqual(
+            schemes.schemeIndex(
+                ofDeviceMatcher: matcher,
+                ofApp: nil,
+                ofProcessPath: nil,
+                ofProcessName: "Bar.exe",
+                ofDisplay: nil
+            ),
+            .insertAt(3)
+        )
+
+        // A processName scheme alone must not satisfy a lookup without app conditions.
+        let processNameOnlySchemes = [
+            Scheme(if: [.init(device: matcher, processName: "Foo.exe")])
+        ]
+        XCTAssertEqual(
+            processNameOnlySchemes.schemeIndex(
+                ofDeviceMatcher: matcher,
+                ofApp: nil,
+                ofProcessPath: nil,
+                ofProcessName: nil,
+                ofDisplay: nil
+            ),
+            .insertAt(0)
+        )
+    }
+
+    func testMergeAutoScroll() {
+        var scheme = Scheme()
+        scheme.buttons.autoScroll.enabled = true
+        scheme.buttons.autoScroll.modes = [.hold]
+
+        var trigger = Scheme.Buttons.Mapping()
+        trigger.button = .mouse(4)
+        trigger.shift = true
+        scheme.buttons.autoScroll.trigger = trigger
+
+        var override = Scheme()
+        override.buttons.autoScroll.toggleActivation = .longPress
+        override.merge(into: &scheme)
+
+        XCTAssertEqual(scheme.buttons.autoScroll.enabled, true)
+        XCTAssertEqual(scheme.buttons.autoScroll.toggleActivation, .longPress)
+        XCTAssertEqual(scheme.buttons.autoScroll.modes, [.hold])
+        XCTAssertEqual(scheme.buttons.autoScroll.trigger?.button, .mouse(4))
+        XCTAssertEqual(scheme.buttons.autoScroll.trigger?.modifierFlags.contains(.maskShift), true)
+    }
+
+    func testMergeAutoScrollPreservesInheritedFields() {
+        var scheme = Scheme()
+        scheme.buttons.autoScroll.enabled = true
+        scheme.buttons.autoScroll.toggleActivation = .longPress
+        scheme.buttons.autoScroll.modes = [.toggle]
+        scheme.buttons.autoScroll.speed = 1
+
+        var trigger = Scheme.Buttons.Mapping()
+        trigger.button = .mouse(2)
+        trigger.command = true
+        scheme.buttons.autoScroll.trigger = trigger
+
+        var override = Scheme()
+        override.buttons.autoScroll.speed = 2
+        override.buttons.autoScroll.modes = [.toggle, .hold]
+        override.merge(into: &scheme)
+
+        XCTAssertEqual(scheme.buttons.autoScroll.enabled, true)
+        XCTAssertEqual(scheme.buttons.autoScroll.toggleActivation, .longPress)
+        XCTAssertEqual(scheme.buttons.autoScroll.modes, [.toggle, .hold])
+        XCTAssertEqual(scheme.buttons.autoScroll.speed, 2)
+        XCTAssertEqual(scheme.buttons.autoScroll.trigger?.button, .mouse(2))
+        XCTAssertEqual(scheme.buttons.autoScroll.trigger?.modifierFlags.contains(.maskCommand), true)
+    }
+
+    func testMergeAutoScrollAllowsDisablingInheritedSetting() {
+        var scheme = Scheme()
+        scheme.buttons.autoScroll.enabled = true
+        scheme.buttons.autoScroll.modes = [.toggle]
+
+        var override = Scheme()
+        override.buttons.autoScroll.enabled = false
+        override.merge(into: &scheme)
+
+        XCTAssertEqual(scheme.buttons.autoScroll.enabled, false)
+        XCTAssertEqual(scheme.buttons.autoScroll.modes, [.toggle])
+    }
+
+    func testMappingDecodesLegacyGenericModifierFlagsWithoutRawFlags() throws {
+        let mapping = try JSONDecoder().decode(
+            Scheme.Buttons.Mapping.self,
+            from: XCTUnwrap(#"{"button":3,"command":true}"#.data(using: .utf8))
+        )
+
+        XCTAssertEqual(mapping.modifierFlags, [.maskCommand])
+        XCTAssertTrue(mapping.command == true)
+        XCTAssertFalse(mapping.shift == true)
+    }
+
+    func testMappingDecodesLegacyLogitechControlFieldIntoButton() throws {
+        let mapping = try JSONDecoder().decode(
+            Scheme.Buttons.Mapping.self,
+            from: XCTUnwrap(
+                #"{"logiButton":{"controlID":208,"logicalDeviceProductID":16478,"logicalDeviceSerialNumber":"ABC123"}}"#
+                    .data(using: .utf8)
+            )
+        )
+
+        XCTAssertEqual(
+            mapping.button,
+            .logitechControl(.init(controlID: 208, productID: 16_478, serialNumber: "ABC123"))
+        )
+    }
+
+    func testMappingEncodesLogitechControlButtonAsTaggedStructure() throws {
+        let mapping = Scheme.Buttons.Mapping(
+            button: .logitechControl(.init(controlID: 208, productID: 16_478, serialNumber: "ABC123"))
+        )
+
+        let data = try JSONEncoder().encode(mapping)
+        let jsonObject = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        let button = try XCTUnwrap(jsonObject["button"] as? [String: Any])
+
+        XCTAssertEqual(button["kind"] as? String, "logitechControl")
+        XCTAssertEqual(button["controlID"] as? Int, 208)
+        XCTAssertEqual(button["productID"] as? Int, 16_478)
+        XCTAssertEqual(button["serialNumber"] as? String, "ABC123")
+    }
+
+    func testMappingDecodesHoldFlag() throws {
+        let mapping = try JSONDecoder().decode(
+            Scheme.Buttons.Mapping.self,
+            from: XCTUnwrap(#"{"button":3,"hold":true,"action":{"keyPress":["c"]}}"#.data(using: .utf8))
+        )
+
+        XCTAssertEqual(mapping.button, .mouse(3))
+        XCTAssertEqual(mapping.hold, true)
+        XCTAssertNil(mapping.repeat)
+    }
+
+    func testMappingEncodesHoldFlag() throws {
+        let mapping = Scheme.Buttons.Mapping(
+            button: .mouse(3),
+            hold: true,
+            action: .arg1(.keyPress([.c]))
+        )
+
+        let data = try JSONEncoder().encode(mapping)
+        let jsonObject = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+
+        XCTAssertEqual(jsonObject["button"] as? Int, 3)
+        XCTAssertEqual(jsonObject["hold"] as? Bool, true)
+        XCTAssertNil(jsonObject["repeat"])
+    }
+
+    func testLogitechControlButtonDecodesHexProductID() throws {
+        let mapping = try JSONDecoder().decode(
+            Scheme.Buttons.Mapping.self,
+            from: XCTUnwrap(
+                #"{"button":{"kind":"logitechControl","controlID":208,"productID":"0x405E"}}"#
+                    .data(using: .utf8)
+            )
+        )
+
+        XCTAssertEqual(
+            mapping.button,
+            .logitechControl(.init(controlID: 208, productID: 0x405E, serialNumber: nil))
+        )
+    }
+
+    func testLoadUppercaseHexDeviceID() throws {
+        // Hex prefixes are conventionally case-insensitive, but the
+        // decoder used to strip only a lowercase 0x. A device matcher
+        // whose vendor/product IDs use an uppercase 0X prefix must still
+        // load (hand-edited and third-party configs frequently use 0X).
+        let configuration = try Configuration.load(from: #"""
+        {
+          "schemes": [
+            {
+              "if": [
+                { "device": { "vendorID": "0X045E", "productID": "0X00C5" } }
+              ]
+            }
+          ]
+        }
+        """#)
+
+        let device = try XCTUnwrap(configuration.schemes[0].if?[0].device)
+        XCTAssertEqual(device.vendorID, 0x045E) // 1118
+        XCTAssertEqual(device.productID, 0x00C5) // 197
+    }
+
+    func testDecodeAutoScrollSingleMode() throws {
+        let autoScroll = try JSONDecoder().decode(
+            Scheme.Buttons.AutoScroll.self,
+            from: XCTUnwrap(#"{"enabled":true,"mode":"hold"}"#.data(using: .utf8))
+        )
+
+        XCTAssertEqual(autoScroll.modes, [.hold])
+        XCTAssertEqual(autoScroll.normalizedModes, [.hold])
+    }
+
+    func testDecodeAutoScrollMultipleModes() throws {
+        let autoScroll = try JSONDecoder().decode(
+            Scheme.Buttons.AutoScroll.self,
+            from: XCTUnwrap(#"{"enabled":true,"mode":["toggle","hold"]}"#.data(using: .utf8))
+        )
+
+        XCTAssertEqual(autoScroll.modes, [.toggle, .hold])
+        XCTAssertEqual(autoScroll.normalizedModes, [.toggle, .hold])
+    }
+
+    func testDecodeAutoScrollDefaultsToShortPressToggleActivation() throws {
+        let autoScroll = try JSONDecoder().decode(
+            Scheme.Buttons.AutoScroll.self,
+            from: XCTUnwrap(#"{"enabled":true}"#.data(using: .utf8))
+        )
+
+        XCTAssertNil(autoScroll.toggleActivation)
+        XCTAssertEqual(autoScroll.normalizedToggleActivation, .shortPress)
+    }
+
+    func testAutoScrollLongPressToggleActivationRoundTrips() throws {
+        let autoScroll = try JSONDecoder().decode(
+            Scheme.Buttons.AutoScroll.self,
+            from: XCTUnwrap(#"{"toggleActivation":"longPress"}"#.data(using: .utf8))
+        )
+
+        XCTAssertEqual(autoScroll.toggleActivation, .longPress)
+        XCTAssertEqual(autoScroll.normalizedToggleActivation, .longPress)
+
+        let encoded = try JSONEncoder().encode(autoScroll)
+        let object = try XCTUnwrap(JSONSerialization.jsonObject(with: encoded) as? [String: Any])
+        XCTAssertEqual(object["toggleActivation"] as? String, "longPress")
+    }
+
+    func testDecodeAutoScrollIgnoresRemovedPreserveNativeMiddleClickOption() throws {
+        let autoScroll = try JSONDecoder().decode(
+            Scheme.Buttons.AutoScroll.self,
+            from: XCTUnwrap(
+                #"{"enabled":true,"preserveNativeMiddleClick":false}"#.data(using: .utf8)
+            )
+        )
+
+        XCTAssertEqual(autoScroll.enabled, true)
+
+        let encoded = try JSONEncoder().encode(autoScroll)
+        let object = try XCTUnwrap(JSONSerialization.jsonObject(with: encoded) as? [String: Any])
+        XCTAssertNil(object["preserveNativeMiddleClick"])
+    }
+
+    func testMergeSmoothedScrollingPreservesInheritedFields() {
+        var scheme = Scheme(
+            scrolling: .init(
+                smoothed: .init(
+                    vertical: .init(
+                        preset: .smooth,
+                        response: Decimal(string: "0.45"),
+                        speed: 1,
+                        acceleration: Decimal(string: "1.2"),
+                        inertia: Decimal(string: "0.65"),
+                        bouncing: true
+                    )
+                )
+            )
+        )
+
+        Scheme(
+            scrolling: .init(
+                smoothed: .init(
+                    vertical: .init(
+                        preset: .smooth,
+                        inertia: 8
+                    )
+                )
+            )
+        ).merge(into: &scheme)
+
+        XCTAssertEqual(scheme.scrolling.smoothed.vertical?.preset, .smooth)
+        XCTAssertEqual(scheme.scrolling.smoothed.vertical?.response, Decimal(string: "0.45"))
+        XCTAssertEqual(scheme.scrolling.smoothed.vertical?.speed, 1)
+        XCTAssertEqual(scheme.scrolling.smoothed.vertical?.acceleration, Decimal(string: "1.2"))
+        XCTAssertEqual(scheme.scrolling.smoothed.vertical?.inertia, 8)
+        XCTAssertEqual(scheme.scrolling.smoothed.vertical?.bouncing, true)
+
+        Scheme(
+            scrolling: .init(
+                smoothed: .init(
+                    vertical: .init(
+                        bouncing: false
+                    )
+                )
+            )
+        ).merge(into: &scheme)
+
+        XCTAssertEqual(scheme.scrolling.smoothed.vertical?.bouncing, false)
+    }
+}

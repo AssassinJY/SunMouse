@@ -1,0 +1,98 @@
+// MIT License
+// Copyright (c) 2021-2026 LinearMouse
+
+import SwiftUI
+
+struct FormViewModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(macOS 13.0, *) {
+            content
+                .formStyle(.grouped)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+        } else {
+            ScrollView {
+                content
+                    .padding(24)
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+            }
+        }
+    }
+}
+
+struct SectionViewModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(macOS 13.0, *) {
+            content
+        } else {
+            content
+
+            Spacer()
+                .frame(height: 20)
+        }
+    }
+}
+
+struct PickerViewModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(macOS 13.0, *) {
+            content
+        } else {
+            // TODO: fixedSize?
+            content
+        }
+    }
+}
+
+struct SettingsDescriptionViewModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.callout)
+            .foregroundColor(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+}
+
+extension View {
+    func settingsDescriptionStyle() -> some View {
+        modifier(SettingsDescriptionViewModifier())
+    }
+}
+
+func withDescription<View1: View, View2: View>(@ViewBuilder content: () -> TupleView<(View1, View2)>) -> some View {
+    let c = content()
+
+    if #available(macOS 13.0, *) {
+        return Group {
+            c.value.0
+            c.value.1.settingsDescriptionStyle()
+        }
+    } else {
+        return VStack(alignment: .leading) {
+            c.value.0
+            c.value.1.settingsDescriptionStyle()
+        }
+    }
+}
+
+func labelWithDescription<
+    View1: View,
+    View2: View
+>(@ViewBuilder content: () -> TupleView<(View1, View2)>) -> some View {
+    let c = content()
+
+    if #available(macOS 13.0, *) {
+        return Group {
+            c.value.0
+            c.value.1
+        }
+    } else {
+        return VStack(alignment: .trailing) {
+            c.value.0
+            c.value
+                .1
+                .controlSize(.small)
+                .foregroundColor(.secondary)
+        }
+    }
+}

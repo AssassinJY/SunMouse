@@ -1,0 +1,49 @@
+// MIT License
+// Copyright (c) 2021-2026 LinearMouse
+
+import Foundation
+import os.log
+
+class SwitchPrimaryAndSecondaryButtonsTransformer {
+    static let log = OSLog(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: "SwitchPrimaryAndSecondaryButtonsTransformer"
+    )
+
+    init() {}
+}
+
+extension SwitchPrimaryAndSecondaryButtonsTransformer: EventTransformer {
+    func transform(_ event: CGEvent, in _: EventTransformerContext) -> CGEvent? {
+        // Replayed clicks have already passed through this transformer once.
+        guard !event.isSunMouseSyntheticEvent else {
+            return event
+        }
+
+        let mouseEventView = MouseEventView(event)
+
+        guard var mouseButton = mouseEventView.mouseButton else {
+            return event
+        }
+
+        switch mouseButton {
+        case .left:
+            mouseButton = .right
+        case .right:
+            mouseButton = .left
+        default:
+            return event
+        }
+
+        mouseEventView.mouseButton = mouseButton
+        event.type = mouseButton.fixedCGEventType(of: event.type)
+        os_log(
+            "Switched primary and secondary button: %{public}s",
+            log: Self.log,
+            type: .info,
+            String(describing: mouseButton)
+        )
+
+        return event
+    }
+}

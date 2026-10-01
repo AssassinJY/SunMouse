@@ -1,0 +1,148 @@
+// MIT License
+// Copyright (c) 2021-2026 LinearMouse
+
+import AppKit
+import Foundation
+import ObservationToken
+import os.log
+
+class GlobalEventTap {
+    private static let log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "GlobalEventTap")
+
+    static let shared = GlobalEventTap()
+
+    private var observationToken: ObservationToken?
+    private lazy var watchdog = GlobalEventTapWatchdog()
+    private let eventThread = EventThread.shared
+    private var shouldRun = false
+
+    init() {}
+
+    private func callback(_ event: CGEvent) -> CGEvent? {
+        if event.getIntegerValueField(.eventSourceUserData) == SMRuntime.marker { return event }
+        SMRuntime.shared.observeLaunchpadDismissal(event)
+        if ![CGEventType.keyDown, .keyUp, .flagsChanged].contains(event.type),
+           !event.isSunMouseSyntheticEvent || [.otherMouseDown, .otherMouseUp].contains(event.type) {
+            // deviceFromCGEvent already resolves an exact sender before its fallback.
+            guard let device = DeviceManager.shared.deviceFromCGEvent(event) else {
+                SMRuntime.shared.unidentified(event)
+                return event
+            }
+            guard device.category == .mouse else { return event }
+            guard !SMTriggerRecorder.shared.capture(event, device: device.id) else { return nil }
+            guard SMRuntime.shared.transform(event, device: device) != nil else { return nil }
+        }
+        PointerLocationTriggerController.shared.handle(event)
+        ModifierState.shared.update(with: event)
+
+        let mouseEventView = MouseEventView(event)
+        let usesProcessConditions = ConfigurationState.shared.snapshot().usesProcessConditions
+        let eventTransformerResolution = EventTransformerManager.shared.resolve(
+            withCGEvent: event,
+            withSourcePid: mouseEventView.sourcePid,
+            withTargetPid: usesProcessConditions ? mouseEventView.targetPid : nil,
+            withMouseLocationPid: usesProcessConditions ? mouseEventView.mouseLocationOwnerPid : nil,
+            withDisplay: ScreenManager.shared.currentScreenNameSnapshot
+        )
+        let transformedEvent = eventTransformerResolution.transform(event)
+        invalidateWindowInfoCacheIfNeeded(for: event)
+        return transformedEvent
+    }
+
+    private func invalidateWindowInfoCacheIfNeeded(for event: CGEvent) {
+        switch event.type {
+        case .leftMouseDown, .rightMouseDown, .otherMouseDown,
+             .leftMouseUp, .rightMouseUp, .otherMouseUp:
+            WindowInfoCache.shared.invalidate()
+        default:
+            break
+        }
+    }
+
+    func start() {
+        shouldRun = true
+
+        startObservation()
+    }
+
+    private func startObservation() {
+        guard observationToken == nil else {
+            return
+        }
+
+        guard AccessibilityPermission.enabled else {
+            let alert = NSAlert()
+            alert.messageText = NSLocalizedString(
+                "Failed to create GlobalEventTap: Accessibility permission not granted",
+                comment: ""
+            )
+            alert.runModal()
+            return
+        }
+
+        var eventTypes: [CGEventType] = EventType.all + [.mouseMoved]
+        if SchemeState.shared.schemes.contains(where: { $0.pointer.redirectsToScroll ?? false }) ||
+            SchemeState.shared.schemes.contains(where: { $0.buttons.$autoScroll?.enabled ?? false }) ||
+            SchemeState.shared.schemes.contains(where: { $0.buttons.$gesture?.enabled ?? false }) {
+            eventTypes.append(EventType.mouseMoved)
+        }
+
+        eventThread.onWillStop = {
+            SMRuntime.shared.cancel()
+            EventTransformerManager.shared.resetForRestart()
+            WindowInfoCache.shared.invalidate()
+        }
+        eventThread.start()
+
+        guard let observationResult = eventThread.performAndWait({ [self] in
+            Result {
+                try EventTap.observe(eventTypes, onInvalidated: { [weak self] in
+                    DispatchQueue.main.async {
+                        self?.restartIfNeeded(reason: "event tap invalidated")
+                    }
+                }) { [weak self] in self?.callback($1) }
+            }
+        }) else {
+            eventThread.stop()
+            return
+        }
+
+        switch observationResult {
+        case let .success(token):
+            observationToken = token
+        case let .failure(error):
+            eventThread.stop()
+            NSAlert(error: error).runModal()
+            return
+        }
+
+        watchdog.start()
+    }
+
+    func stop() {
+        shouldRun = false
+        stopObservation()
+    }
+
+    private func stopObservation() {
+        // Release the observation token, which dispatches timer invalidation
+        // to the event RunLoop (see EventTap.observe).
+        observationToken = nil
+
+        // EventThread.stop() fires onWillStop (which calls resetForRestart)
+        // then stops the RunLoop, all in FIFO order.
+        eventThread.stop()
+
+        watchdog.stop()
+    }
+
+    private func restartIfNeeded(reason: StaticString) {
+        guard shouldRun else {
+            return
+        }
+
+        os_log("Restart GlobalEventTap: %{public}@", log: Self.log, type: .info, String(describing: reason))
+        stopObservation()
+        startObservation()
+    }
+}
