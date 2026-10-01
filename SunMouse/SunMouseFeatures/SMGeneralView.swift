@@ -7,6 +7,9 @@ struct SMGeneralView: View {
             Section("SunMouse") {
                 Text("管理指针、滚轮、侧键与手势。").foregroundStyle(.secondary)
                 LabeledContent("版本", value: SunMouse.appVersion)
+                LabeledContent("GitHub") {
+                    Link("github.com/AssassinJY/SunMouse", destination: URL(string: "https://github.com/AssassinJY/SunMouse")!)
+                }
                 if CommandLine.arguments.contains("--preview") { Text("预览模式：尚未启动鼠标事件处理。").foregroundStyle(.secondary) }
                 LabeledContent("辅助功能", value: AccessibilityPermission.enabled ? "已授权" : "等待授权")
                 if !AccessibilityPermission.enabled { Button("打开辅助功能设置") { NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!) } }
