@@ -285,6 +285,12 @@ struct MMFScrollDynamics {
     private(set) var interval = 0.16
     private(set) var startsSequence = true
 
+    init(configuration: SMScrollConfiguration, mode: Mode = .normal, screenSize: Double = 1080) {
+        self.configuration = configuration
+        self.mode = mode
+        self.screenSize = screenSize
+    }
+
     mutating func distance(input: Double, timestamp: Double) -> Double {
         let tickMax = mode == .quick ? 0.2 : 0.16
         let rawInterval = lastTime.map { max(timestamp - $0, 0.001) } ?? .infinity
